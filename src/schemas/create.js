@@ -1,6 +1,6 @@
 import { source } from "../chimpanzee-utils";
 import { module } from "./";
-import { capture, any, array, Match, Skip } from "chimpanzee";
+import { capture, any, array, repeatingItem, Match, Skip } from "chimpanzee";
 import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
 import { create } from "../fs-statements";
@@ -63,9 +63,13 @@ export default function(state, analysisState) {
             ? result.value.args.length === 3
               && new Set(keyArray).size === 3
               && keyArray.every((v, i) => ['contents', 'dir', 'filename'].includes(v.key))
-              ? create({ [result.value.args[0].key]: result.value.args[0].value,
-                [result.value.args[1].key]: result.value.args[1].value,
-                [result.value.args[2].key]: result.value.args[2].value }, result.value.left)
+              ? create(
+                {
+                  [result.value.args[0].key]: result.value.args[0].value,
+                  [result.value.args[1].key]: result.value.args[1].value,
+                  [result.value.args[2].key]: result.value.args[2].value
+                }, result.value.left
+              )
               : new Skip(`File creation must be accompanied by three values:
                 "dir", "filename", "contents"`);
             : new Skip(`The result of the concat() must be assigned to the fs module`)

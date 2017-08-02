@@ -6,7 +6,7 @@ export function create(args, source) {
   return { type: "create", ...args, ...source }
 }
 
-export function delete(args, source) {
+export function deleteF(args, source) {
   return { type: "delete", ...args, ...source }
 }
 
