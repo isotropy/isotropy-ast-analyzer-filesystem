@@ -3,7 +3,7 @@ import path from "path";
 export default function(analysisState) {
   return {
     analyzeImportDeclaration(babelPath, state) {
-      const dbModules = Object.keys(state.opts.filesystemModules).map(key => ({
+      const fsModules = Object.keys(state.opts.filesystemModules).map(key => ({
         key,
         value: path.resolve(state.opts.filesystemModules[key])
       }));
