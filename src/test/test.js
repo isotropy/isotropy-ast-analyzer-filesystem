@@ -49,7 +49,7 @@ describe("isotropy-ast-analyzer-fs", () => {
           [
             pluginInfo.plugin,
             {
-              databaseModules: {
+              filesystemModules: {
                 todosFsModule: "./dist/test/fixtures/my-fs",
                 backupFsModule: "./dist/test/fixtures/backup-fs"
               }
@@ -70,17 +70,18 @@ describe("isotropy-ast-analyzer-fs", () => {
   }
 
   const tests = [
-    ["create", "create"],
-    ["read", "read"],
-    ["update", "update"],
-    ["get-files", "get-files"],
-    ["getfiles-r", "get-files-r"],
-    ["move-files", "move-files"],
-    ["move-folder"], ["move-folder"],
-    ["delete-file", "delete-file"],
+    // ["create", "create"],
+    // ["read", "read"],
+    // ["update", "update"],
+    // ["get-files", "get-files"],
+    // ["getfiles-r", "get-files-r"],
+    // ["move-files", "move-files"],
+    // ["move-folder"], ["move-folder"],
+    // ["delete-file", "delete-file"],
     ["delete-folder", "delete-folder"]
   ];
 
+  debugger;
   for (const test of tests) {
     run(test);
   }

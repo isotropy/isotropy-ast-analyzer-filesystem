@@ -1,7 +1,15 @@
-import { source } from "../chimpanzee-utils";
-import { module } from "./";
-import { capture, any, Match, Skip } from "chimpanzee";
+import { collection } from "./";
+import {
+  capture,
+  any,
+  array,
+  map as mapResult,
+  wrap,
+  Match,
+  Skip
+} from "chimpanzee";
 import composite from "../chimpanzee-utils/composite";
+import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
 import { deleteF } from "../fs-statements";
 
@@ -10,106 +18,111 @@ export default function(state, analysisState) {
     {
       type: "AssignmentExpression",
       operator: "=",
-      left: source([module])(state, analysisState),
+      left: wrap(collection(state, analysisState), {
+        key: "left",
+        selector: "path"
+      }),
       right: {
         type: "CallExpression",
         callee: {
           type: "MemberExpression",
-          object: source([module])(state, analysisState),
+          object: wrap(collection(state, analysisState), {
+            key: "right",
+            selector: "path"
+          }),
           property: {
             type: "Identifier",
             name: "filter"
           }
         },
-        arguments: [
-          type: "ArrowFunctionExpression",
-          params: [
+        arguments: array(
+          [
             {
-              type: "Identifier",
-              name: "todo"
-            }
-          ],
-          body: {
-            type: "UnaryExpression",
-            operator: "!",
-            argument: {
-              type: "LogicalExpression",
-              left: {
-                type: "BinaryExpression",
-                left: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "Identifier",
-                    name: "todo"
-                  },
-                  property: {
-                    type: "Identifier",
-                    name: capture("key1")
-                  }
-                },
-                operator: "==="
-                any([
-                  mapResult(
-                    right: {
-                      type: "StringLiteral",
-                      value: capture("val1")
+              type: "ArrowFunctionExpression",
+              params: [
+                {
+                  type: "Identifier",
+                  name: capture("fsIdentifier1")
+                }
+              ],
+              body: {
+                type: "UnaryExpression",
+                operator: "!",
+                argument: {
+                  type: "LogicalExpression",
+                  left: {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: {
+                        type: "Identifier",
+                        name: capture("fsIdentifier2")
                       },
-                    s => s.value
-                  ),
-                  right: {
-                    type: "Identifier",
-                    value: capture("val1")
-                  }
-                ])
-              },
-              operator: "&&",
-              right: {
-                type: "BinaryExpression",
-                left: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "Identifier",
-                    name: "todo"
+                      property: {
+                        type: "Identifier",
+                        name: capture("key1")
+                      }
+                    },
+                    operator: "===",
+                    right: capture("val1")
                   },
-                  property: {
-                    type: "Identifier",
-                    name: capture("key2")
-                  }
-                },
-                operator: "==="
-                any([
-                  mapResult(
-                    right: {
-                      type: "StringLiteral",
-                      value: capture("val2")
-                      },
-                    s => s.value
-                  ),
+                  operator: "&&",
                   right: {
-                    type: "Identifier",
-                    value: capture("val2")
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: {
+                        type: "Identifier",
+                        name: capture("fsIdentifier3")
+                      },
+                      property: {
+                        type: "Identifier",
+                        name: capture("key2")
+                      }
+                    },
+                    operator: "===",
+                    right: capture("val2")
                   }
-                ])
+                }
               }
             }
-          }
-        ]
+          ],
+          { key: "args" }
+        )
       }
     },
     {
-      build: obj => context => result =>
-        result instanceof Match
-          ? R.equals(result.value.left, result.value.object)
-            ? result.value.key1 !== result.value.key2
-              && [result.value.key1, result.value.key2].every((v, i)
-                    => ['dir', 'filename'].includes(v.key))
-            ? delete({ ...result.value.object,
-              [result.value.key1]: result.value.val1,
-              [result.value.key2]: result.value.val2 },
-              result.value.left)
-              : new Skip(`File deletion requires "dir" and "filename"`)
-            : new Skip(`The result of the filter() must be assigned to the same fs module.`)
-          : result
+      build: obj => context => result => {
+        return result instanceof Match
+          ? (() => {
+              const props = result.value.args[0];
+              const fs = result.value.left;
+              debugger;
+              return R.equals(result.value.left, result.value.right)
+                ? props.params[0].fsIdentifier1 === props.fsIdentifier2 &&
+                    props.fsIdentifier2 === props.fsIdentifier3 &&
+                    props.key1 !== props.key2 &&
+                    [props.key1, props.key2].every((v, i) =>
+                      ["dir", "filename"].includes(v)
+                    )
+                  ? deleteF(
+                      {
+                        [props.key1]: clean(props.val1),
+                        [props.key2]: clean(props.val2)
+                      },
+                      {
+                        module: fs.module,
+                        identifier: fs.identifier,
+                        collection: fs.collection
+                      }
+                    )
+                  : new Skip(`File deletion requires "dir" and "filename"`)
+                : new Skip(
+                    `The result of the filter() must be assigned to the same fs module.`
+                  );
+            })()
+          : result;
+      }
     }
   );
 }

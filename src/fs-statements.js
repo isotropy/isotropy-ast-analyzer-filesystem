@@ -1,4 +1,4 @@
-export function module(source) {
+export function createCollection(source) {
   return { type: "fs", ...source }
 }
 

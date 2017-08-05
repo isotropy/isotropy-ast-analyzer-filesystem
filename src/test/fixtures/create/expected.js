@@ -2,7 +2,8 @@ module.exports = {
   type: "create",
   dir: "documents",
   filename: "report.txt",
-  contents: "hello_word",
+  contents: "hello, world",
   module: "todosFsModule",
-  identifier: "myFs"
+  identifier: "myFs",
+  collection: "docs"
 }

@@ -1,7 +1,14 @@
 module.exports = {
   type: "delete",
-  dir: "documents",
-  filename: "report.txt",
+  dir: {
+    type: "StringLiteral",
+    "value": "documents"
+  },
+  filename: {
+    "type": "StringLiteral",
+    "value": "report.txt"
+  },
   module: "todosFsModule",
-  identifier: "myFs"
+  identifier: "myFs",
+  collection: "docs"
 }

@@ -1,6 +1,10 @@
 module.exports = {
   type: "delete",
-  dir: "documents",
+  dir: {
+    "type": "StringLiteral",
+    "value": "documents"
+  },
   module: "todosFsModule",
-  identifier: "myFs"
+  identifier: "myFs",
+  collection: "docs"
 }

@@ -1,7 +1,7 @@
 import myFs from "../my-fs";
 
 async function deleteFolder() {
-  myFs = myFs.filter(
+  myFs.docs = myFs.docs.filter(
     file => !(file.dir === "documents")
   );
 }

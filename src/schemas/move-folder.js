@@ -1,6 +1,5 @@
-import { source } from "../chimpanzee-utils";
-import { module } from "./";
-import { capture, any, Match, Skip } from "chimpanzee";
+import { root } from "./";
+import { capture, any, map as mapResult,Match, Skip } from "chimpanzee";
 import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
 import { move } from "../fs-statements";
@@ -10,85 +9,87 @@ export default function(state, analysisState) {
     {
       type: "AssignmentExpression",
       operator: "=",
-      left: source([module])(state, analysisState),
+      left: root(state, analysisState),
       right: {
         type: "ConditionalExpression",
         test: {
           type: "CallExpression",
           callee: {
             type: "MemberExpression",
-            object: source([module])(state, analysisState),
+            object: root(state, analysisState),
             property: {
               type: "Identifier",
               name: "map"
             }
           },
           arguments: [
-            type: "ArrowFunctionExpression",
-            params: [
-              {
-                type: "Identifier",
-                name: "todo"
-              }
-            ],
-            body: {
-              type: "BinaryExpression",
-              left: {
-                type: "MemberExpression",
-                object: {
+            {
+              type: "ArrowFunctionExpression",
+              params: [
+                {
                   type: "Identifier",
                   name: "todo"
-                },
-                property: {
-                  type: "Identifier",
-                  name: "dir"
                 }
-              },
-              operator: "===",
-              any([
-                mapResult(
-                  right: {
-                    type: "StringLiteral",
+              ],
+              body: {
+                type: "BinaryExpression",
+                left: {
+                  type: "MemberExpression",
+                  object: {
+                    type: "Identifier",
+                    name: "todo"
+                  },
+                  property: {
+                    type: "Identifier",
+                    name: "dir"
+                  }
+                },
+                operator: "===",
+                right: any([
+                  {
+                    type: "Identifier",
                     value: "oldDir"
                   },
-                  s => s.value
-                ),
-                right: {
-                  type: "Identifier",
-                  value: "oldDir"
-                }
-              ])
-            },
+                  mapResult(
+                    {
+                      type: "StringLiteral",
+                      value: "oldDir"
+                    },
+                    s => s.value
+                  )
+                ])
+              },
+            }
           ]
         },
         consequent: {
           type: "ObjectExpression",
           properties: [
-            SpreadProperty: {
+            {
               type: "SpreadProperty",
               argument: {
                 type: "Identifier",
                 name: "todo"
               }
             },
-            ObjectProperty: {
+            {
               type: "ObjectProperty",
               key: {
                 type: "Identifier",
                 name: "dir"
               },
-              any([
+              right: any([
+                {
+                  type: "Identifier",
+                  value: "newDir"
+                },
                 mapResult(
-                  right: {
+                  {
                     type: "StringLiteral",
                     value: "newDir"
                   },
                   s => s.value
-                ),
-                right: {
-                  type: "Identifier",
-                  value: "newDir"
-                }
+                )
               ])
             },
           ]

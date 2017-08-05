@@ -1,7 +1,7 @@
 import myFs from "../my-fs";
 
 async function createFile() {
-  myFs = myFs.concat({
+  myFs.docs = myFs.docs.concat({
     dir: "documents",
     filename: "report.txt",
     contents: "hello, world"
