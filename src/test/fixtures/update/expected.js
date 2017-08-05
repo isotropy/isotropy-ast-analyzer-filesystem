@@ -1,8 +1,18 @@
 module.exports = {
-  type: "read",
-  dir: "documents",
-  filename: "report.txt",
-  contents: "hello, universe",
+  type: "update",
+  dir: {
+    "type": "StringLiteral",
+    "value": "documents"
+  },
+  filename: {
+    "type": "StringLiteral",
+    "value": "report.txt"
+  },
+  content: {
+    "type": "StringLiteral",
+    "value": "hello, universe"
+  },
   module: "todosFsModule",
-  identifier: "myFs"
+  identifier: "myFs",
+  collection: "docs"
 }

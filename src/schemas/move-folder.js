@@ -1,5 +1,5 @@
 import { root } from "./";
-import { capture, any, map as mapResult,Match, Skip } from "chimpanzee";
+import { capture, any, map as mapResult, Match, Skip } from "chimpanzee";
 import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
 import { move } from "../fs-statements";
@@ -58,7 +58,7 @@ export default function(state, analysisState) {
                     s => s.value
                   )
                 ])
-              },
+              }
             }
           ]
         },
@@ -91,7 +91,7 @@ export default function(state, analysisState) {
                   s => s.value
                 )
               ])
-            },
+            }
           ]
         },
         alternate: {
@@ -104,11 +104,17 @@ export default function(state, analysisState) {
       build: obj => context => result =>
         result instanceof Match
           ? R.equals(result.value.left, result.value.object)
-            ? move({ ...result.value.object,
-              oldDir: result.value.oldDir,
-              newDir: result.value.newDir },
-              result.value.left)
-            : new Skip(`The result of the map() must be assigned to the same fs module.`)
+            ? move(
+                {
+                  ...result.value.object,
+                  oldDir: result.value.oldDir,
+                  newDir: result.value.newDir
+                },
+                result.value.left
+              )
+            : new Skip(
+                `The result of the map() must be assigned to the same fs module.`
+              )
           : result
     }
   );
