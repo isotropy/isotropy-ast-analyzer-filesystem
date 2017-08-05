@@ -1,7 +1,11 @@
 module.exports = {
   type: "getFiles",
-  dir: "/some/path",
+  dir: {
+    type: "StringLiteral",
+    value: "/some/path"
+  },
   recurse: false,
   module: "todosFsModule",
-  identifier: "myFs"
-}
+  identifier: "myFs",
+  collection: "docs"
+};
