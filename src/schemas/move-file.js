@@ -1,187 +1,189 @@
-import { root } from "./";
-import { capture, any, map as mapResult,Match, Skip } from "chimpanzee";
+import { collection } from "./";
+import {
+  capture,
+  any,
+  array,
+  map as mapResult,
+  wrap,
+  Match,
+  Skip
+} from "chimpanzee";
 import composite from "../chimpanzee-utils/composite";
+import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
 import { move } from "../fs-statements";
 
 export default function(state, analysisState) {
+  const spreadFilesNode = {
+    type: "SpreadProperty",
+    argument: {
+      type: "Identifier",
+      name: capture("fsIdentifier4")
+    }
+  };
+
+  const valueNode = nodeIdentifier => ({
+    type: "ObjectProperty",
+    key: {
+      type: "Identifier",
+      name: capture("key" + nodeIdentifier)
+    },
+    value: capture("valueNode" + nodeIdentifier)
+  });
+
   return composite(
     {
       type: "AssignmentExpression",
       operator: "=",
-      left: root(state, analysisState),
+      left: wrap(collection(state, analysisState), {
+        key: "left",
+        selector: "path"
+      }),
       right: {
-        type: "ConditionalExpression",
-        test: {
-          type: "CallExpression",
-          callee: {
-            type: "MemberExpression",
-            object: root(state, analysisState),
-            property: {
-              type: "Identifier",
-              name: "map"
-            }
-          },
-          arguments: [
+        type: "CallExpression",
+        callee: {
+          type: "MemberExpression",
+          object: wrap(collection(state, analysisState), {
+            key: "right",
+            selector: "path"
+          }),
+          property: {
+            type: "Identifier",
+            name: "map"
+          }
+        },
+        arguments: array(
+          [
             {
               type: "ArrowFunctionExpression",
               params: [
                 {
                   type: "Identifier",
-                  name: "todo"
+                  name: capture("fsIdentifier1")
                 }
               ],
               body: {
-                type: "LogicalExpression",
-                left: {
-                  type: "BinaryExpression",
+                type: "ConditionalExpression",
+                test: {
+                  type: "LogicalExpression",
                   left: {
-                    type: "MemberExpression",
-                    object: {
-                      type: "Identifier",
-                      name: "todo"
-                    },
-                    property: {
-                      type: "Identifier",
-                      name: capture("key1")
-                    }
-                  },
-                  operator: "===",
-                  left: any([
-                    {
-                      type: "Identifier",
-                      value: capture("val1")
-                    },
-                    mapResult(
-                      {
-                        type: "StringLiteral",
-                        value: capture("val1")
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: {
+                        type: "Identifier",
+                        name: capture("fsIdentifier2")
                       },
-                      s => s.value
-                    )
-                  ])
-                },
-                operator: "&&",
-                right: {
-                  type: "BinaryExpression",
-                  left: {
-                    type: "MemberExpression",
-                    object: {
-                      type: "Identifier",
-                      name: "todo"
+                      property: {
+                        type: "Identifier",
+                        name: capture("key1")
+                      }
                     },
                     operator: "===",
-                    property: {
-                      type: "Identifier",
-                      name: capture("key2")
-                    }
+                    right: capture("valueNode1")
                   },
-                  right: any([
-                    {
-                      type: "Identifier",
-                      value: capture("val2")
-                    },
-                    mapResult(
-                      {
-                        type: "StringLiteral",
-                        value: capture("val2")
+                  operator: "&&",
+                  right: {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: {
+                        type: "Identifier",
+                        name: capture("fsIdentifier3")
                       },
-                      s => s.value
-                    )
+                      property: {
+                        type: "Identifier",
+                        name: capture("key2")
+                      }
+                    },
+                    operator: "===",
+                    right: capture("valueNode2")
+                  }
+                },
+                consequent: {
+                  type: "ObjectExpression",
+                  properties: any([
+                    [spreadFilesNode, valueNode(3), valueNode(4)],
+                    [valueNode(3), spreadFilesNode, valueNode(4)],
+                    [valueNode(3), valueNode(4), spreadFilesNode]
                   ])
+                },
+                alternate: {
+                  type: "Identifier",
+                  name: capture("fsIdentifier5")
                 }
               }
             }
-          ]
-        },
-        consequent: {
-          type: "ObjectExpression",
-          properties: [
-            {
-              type: "SpreadProperty",
-              argument: {
-                type: "Identifier",
-                name: "todo"
-              }
-            },
-            {
-              type: "ObjectProperty",
-              key: {
-                type: "Identifier",
-                name: capture("key3")
-              },
-              value: any([
-                {
-                  type: "Identifier",
-                  value: capture("val3")
-                },
-                mapResult(
-                  {
-                    type: "StringLiteral",
-                    value: capture("val3")
-                  },
-                  s => s.value
-                )
-              ])
-            },
-            {
-              type: "ObjectProperty",
-              key: {
-                type: "Identifier",
-                name: capture("key4")
-              },
-              value: any([
-                {
-                  type: "Identifier",
-                  value: capture("val4")
-                },
-                mapResult(
-                  {
-                    type: "StringLiteral",
-                    value: capture("val4")
-                  },
-                  s => s.value
-                )
-              ])
-            }
-          ]
-        },
-        alternate: {
-          type: "Identifier",
-          name: "todo"
-        }
+          ],
+          { key: "args" }
+        )
       }
     },
     {
       build: obj => context => result => {
         return result instanceof Match
           ? (() => {
-            const shouldContain = ["dir", "filename"];
-            const mapKeys = [result.value.key1, result.value.key2];
-            const updateKeys = [result.value.key3, result.value.key4];
+              const conditionalShouldContain = ["dir", "filename"];
+              const remapShouldContain = ["newDir", "newFilename"];
+              const fsIdentifierArray = [
+                result.value.args[0].params[0].fsIdentifier1,
+                result.value.args[0].fsIdentifier2,
+                result.value.args[0].fsIdentifier3,
+                result.value.args[0].properties[0].fsIdentifier4,
+                result.value.args[0].fsIdentifier5
+              ];
+              const keyArray = [
+                result.value.args[0].key1,
+                result.value.args[0].key2,
+                result.value.args[0].properties[1].key3,
+                result.value.args[0].properties[2].key4
+              ];
+              if (keyArray[2] === "dir") {
+                keyArray[2] = "newDir";
+                keyArray[3] = "newFilename";
+              } else {
+                keyArray[2] = "newFilename";
+                keyArray[3] = "newDir";
+              }
+              const valueArray = [
+                result.value.args[0].valueNode1,
+                result.value.args[0].valueNode2,
+                result.value.args[0].properties[1].valueNode3,
+                result.value.args[0].properties[2].valueNode4
+              ];
+              const fs = result.value.left;
 
-            return R.equals(result.value.left, result.value.object)
-              ? mapKeys[0] !== mapKeys[1] &&
-                  updateKeys[0] !== updateKeys[1] &&
-                  mapKeys.every((v, i) => shouldContain.includes(v.key)) &&
-                  updateKeys.every((v, i) => shouldContain.includes(v.key))
-                ? move(
-                    {
-                      ...result.value.object,
-                      [result.value.key1]: result.value.val1,
-                      [result.value.key2]: result.value.val2,
-                      [result.value.key3]: result.value.val3,
-                      [result.value.key4]: result.value.val4
-                    },
-                    result.value.left
-                  )
-                : new Skip(
-                    `The result of the map() must be assigned to the same fs module.`
-                  )
-              : new Skip(
-                  `The required fields under "dir" and "filename must be populated."`
-                )
-          })()
+              return R.equals(result.value.left, result.value.right)
+                ? new Set(fsIdentifierArray).size === 1
+                  ? keyArray[0] !== keyArray[1] &&
+                      keyArray[2] !== keyArray[3] &&
+                      keyArray
+                        .slice(0, 2)
+                        .every((v, i) => conditionalShouldContain.includes(v)) &&
+                      keyArray
+                        .slice(2)
+                        .every((v, i) => remapShouldContain.includes(v))
+                    ? move(
+                        {
+                          [keyArray[0]]: clean(valueArray[0]),
+                          [keyArray[1]]: clean(valueArray[1]),
+                          [keyArray[2]]: clean(valueArray[2]),
+                          [keyArray[3]]: clean(valueArray[3])
+                        },
+                        {
+                          module: fs.module,
+                          identifier: fs.identifier,
+                          collection: fs.collection
+                        }
+                      )
+                    : new Skip(
+                        `The result of the map() must be assigned to the same fs module.`
+                      )
+                  : new Skip(
+                      `The fields "dir" and "filename" are required for updating.`
+                    )
+                : new Skip(`Make sure you are using the same access variable.`);
+            })()
           : result;
       }
     }

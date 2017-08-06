@@ -73,7 +73,6 @@ export default function(state, analysisState) {
     },
     {
       build: obj => context => result => {
-        debugger;
         return result instanceof Match
           ? R.equals(result.value.left, result.value.right)
             ? result.value.args[0].params[0].fsIdentifier1 ===

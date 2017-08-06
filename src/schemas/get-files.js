@@ -61,18 +61,22 @@ export default function(state, analysisState) {
     },
     {
       build: () => () => result => {
-        const fs = result.value.fs;
-        return result.value.args[0].params[0].fsIdentifier1 ===
-          result.value.args[0].fsIdentifier2
-          ? getFiles(
-              { dir: result.value.args[0].val1, recurse: false },
-              {
-                identifier: fs.identifier,
-                module: fs.module,
-                collection: fs.collection
-              }
-            )
-          : new Skip(`File system access variables do not match`);
+        return result instanceof Match
+          ? (() => {
+              const fs = result.value.fs;
+              return result.value.args[0].params[0].fsIdentifier1 ===
+                result.value.args[0].fsIdentifier2
+                ? getFiles(
+                    { dir: result.value.args[0].val1, recurse: false },
+                    {
+                      identifier: fs.identifier,
+                      module: fs.module,
+                      collection: fs.collection
+                    }
+                  )
+                : new Skip(`File system access variables do not match`);
+            })()
+          : result;
       }
     }
   );

@@ -1,9 +1,22 @@
 module.exports = {
-  type: "create",
-  dir: "documents",
-  filename: "report.txt",
-  newDir: "reports",
-  newFilename: "report.txt",
+  type: "move",
+  dir: {
+    type: "StringLiteral",
+    value: "documents"
+  },
+  filename: {
+    type: "StringLiteral",
+    value: "report.txt"
+  },
+  newDir: {
+    type: "StringLiteral",
+    value: "reports"
+  },
+  newFilename: {
+    type: "StringLiteral",
+    value: "report.txt"
+  },
   module: "todosFsModule",
-  identifier: "myFs"
-}
+  identifier: "myFs",
+  collection: "docs"
+};
