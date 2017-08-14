@@ -39,7 +39,12 @@ function clean(obj) {
 describe("isotropy-ast-analyzer-fs", () => {
   function run([description, dir, opts]) {
     it(`${description}`, () => {
-      const fixturePath = path.resolve(__dirname, "fixtures", dir, `fixture.js`);
+      const fixturePath = path.resolve(
+        __dirname,
+        "fixtures",
+        dir,
+        `fixture.js`
+      );
       const outputPath = path.resolve(__dirname, "fixtures", dir, `output.js`);
       const expected = require(`./fixtures/${dir}/expected`);
       const pluginInfo = makePlugin(opts);
@@ -74,11 +79,11 @@ describe("isotropy-ast-analyzer-fs", () => {
     ["read", "read"],
     ["update", "update"],
     ["get-files", "get-files"],
-    ["getfiles-r", "get-files-r"],
+    ["getfiles-recursive", "get-files-recursive"],
     ["move-file", "move-file"],
-    ["move-folder", "move-folder"],
+    ["move-dir", "move-dir"],
     ["delete-file", "delete-file"],
-    ["delete-folder", "delete-folder"]
+    ["delete-dir", "delete-dir"]
   ];
 
   debugger;

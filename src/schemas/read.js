@@ -87,11 +87,11 @@ export default function(state, analysisState) {
               const props = result.value.args[0];
               const fs = result.value.fs;
               return props.params[0].fsIdentifier1 === props.fsIdentifier2 &&
-                props.fsIdentifier2 === props.fsIdentifier3 &&
-                props.key1 !== props.key2 &&
-                [props.key1, props.key2].every((v, i) =>
-                  ["dir", "filename"].includes(v)
-                )
+              props.fsIdentifier2 === props.fsIdentifier3 &&
+              props.key1 !== props.key2 &&
+              [props.key1, props.key2].every((v, i) =>
+                ["dir", "filename"].includes(v)
+              )
                 ? read(
                     {
                       [props.key1]: clean(props.val1),

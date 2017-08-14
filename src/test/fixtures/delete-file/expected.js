@@ -2,13 +2,13 @@ module.exports = {
   type: "delete",
   dir: {
     type: "StringLiteral",
-    "value": "documents"
+    value: "documents"
   },
   filename: {
-    "type": "StringLiteral",
-    "value": "report.txt"
+    type: "StringLiteral",
+    value: "report.txt"
   },
   module: "todosFsModule",
   identifier: "myFs",
   collection: "docs"
-}
+};

@@ -6,9 +6,16 @@ import { parse, any, builtins as b } from "chimpanzee";
   schemas might contain schemas which contain themselves.
 */
 export default function(schemas) {
-  const defer = schema => (state, analysisState) => (obj, key, parents, parentKeys) => context =>
+  const defer = schema => (state, analysisState) => (
+    obj,
+    key,
+    parents,
+    parentKeys
+  ) => context =>
     parse(schema(state, analysisState))(obj, key, parents, parentKeys)(context);
 
   return (state, analysisState) =>
-    any(schemas.map(schema => defer(schema)(state, analysisState)), { selector: "path" });
+    any(schemas.map(schema => defer(schema)(state, analysisState)), {
+      selector: "path"
+    });
 }

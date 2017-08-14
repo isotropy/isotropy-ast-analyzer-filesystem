@@ -8,5 +8,5 @@ export default function(schema, params) {
       { name: "path", modifiers: { property: (path, key) => path.get(key) } }
     ],
     params
-  )
+  );
 }

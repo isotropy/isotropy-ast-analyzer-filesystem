@@ -1,14 +1,14 @@
 module.exports = {
   type: "read",
   dir: {
-    "type": "StringLiteral",
-    "value": "/some/path"
+    type: "StringLiteral",
+    value: "/some/path"
   },
   filename: {
-    "type": "StringLiteral",
-    "value": "report.txt"
+    type: "StringLiteral",
+    value: "report.txt"
   },
   module: "todosFsModule",
   identifier: "myFs",
   collection: "docs"
-}
+};

@@ -100,11 +100,11 @@ export default function(state, analysisState) {
               debugger;
               return R.equals(result.value.left, result.value.right)
                 ? props.params[0].fsIdentifier1 === props.fsIdentifier2 &&
-                    props.fsIdentifier2 === props.fsIdentifier3 &&
-                    props.key1 !== props.key2 &&
-                    [props.key1, props.key2].every((v, i) =>
-                      ["dir", "filename"].includes(v)
-                    )
+                  props.fsIdentifier2 === props.fsIdentifier3 &&
+                  props.key1 !== props.key2 &&
+                  [props.key1, props.key2].every((v, i) =>
+                    ["dir", "filename"].includes(v)
+                  )
                   ? deleteF(
                       {
                         [props.key1]: clean(props.val1),

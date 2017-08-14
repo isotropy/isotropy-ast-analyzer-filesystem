@@ -6,4 +6,4 @@ module.exports = {
   module: "todosFsModule",
   identifier: "myFs",
   collection: "docs"
-}
+};

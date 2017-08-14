@@ -1,4 +1,4 @@
-export default function clean (obj) {
+export default function clean(obj) {
   if (typeof obj !== "object") {
     return obj;
   } else {

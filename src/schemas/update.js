@@ -144,7 +144,7 @@ export default function(state, analysisState) {
               return R.equals(result.value.left, result.value.right)
                 ? new Set(fsIdentifierArray).size === 1
                   ? keyArray[0] !== keyArray[1] &&
-                      keyArray.every((v, i) => shouldContain.includes(v))
+                    keyArray.every((v, i) => shouldContain.includes(v))
                     ? update(
                         {
                           [keyArray[0]]: clean(valueArray[0]),

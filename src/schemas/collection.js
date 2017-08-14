@@ -7,7 +7,10 @@ export default function(state, analysisState) {
   return composite(
     {
       type: "MemberExpression",
-      object: wrap(root(state, analysisState), { key: "root", selector: "path" }),
+      object: wrap(root(state, analysisState), {
+        key: "root",
+        selector: "path"
+      }),
       property: {
         type: "Identifier",
         name: capture("collection")

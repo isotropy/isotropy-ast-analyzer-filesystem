@@ -9,7 +9,10 @@ export default function(analysisState) {
       }));
 
       const moduleName = babelPath.get("source").node.value;
-      const resolvedName = path.resolve(path.dirname(state.file.opts.filename), moduleName);
+      const resolvedName = path.resolve(
+        path.dirname(state.file.opts.filename),
+        moduleName
+      );
 
       const fsModule = fsModules.find(p => p.value === resolvedName);
       if (fsModule) {

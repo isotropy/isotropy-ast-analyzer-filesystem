@@ -80,10 +80,10 @@ export default function(state, analysisState) {
               const keyArray = [props[0].key, props[1].key, props[2].key];
               return R.equals(result.value.left, result.value.right)
                 ? props.length === 3 &&
-                    new Set(keyArray).size === 3 &&
-                    keyArray.every((v, i) =>
-                      ["contents", "dir", "filename"].includes(v)
-                    )
+                  new Set(keyArray).size === 3 &&
+                  keyArray.every((v, i) =>
+                    ["contents", "dir", "filename"].includes(v)
+                  )
                   ? create(
                       {
                         [props[0].key]: props[0].value,
