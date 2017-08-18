@@ -4,7 +4,7 @@
   "author": "Arivanandan<uarivanandan@gmail.com>",
   "contributors": [
     "Jeswin Kumar<jeswinpk@agilehead.com>",
-    "Arivanandan U<uarivanandan@gmail.com>"
+    "Arivanandan<uarivanandan@gmail.com>"
   ],
   "scripts": {
     "test": "mocha dist/test/test.js",

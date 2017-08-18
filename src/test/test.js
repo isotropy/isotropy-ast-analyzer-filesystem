@@ -4,37 +4,9 @@ import fs from "fs";
 import path from "path";
 import makePlugin from "./plugin";
 import sourceMapSupport from "source-map-support";
+import clean from "../chimpanzee-utils/node-cleaner";
 
 sourceMapSupport.install();
-
-function clean(obj) {
-  if (typeof obj !== "object") {
-    return obj;
-  } else {
-    if (Array.isArray(obj)) {
-      return obj.map(o => clean(o));
-    } else {
-      const newObj = {};
-      for (const key in obj) {
-        if (
-          ![
-            "start",
-            "end",
-            "loc",
-            "computed",
-            "shorthand",
-            "extra",
-            "__clone",
-            "path"
-          ].includes(key)
-        ) {
-          newObj[key] = clean(obj[key]);
-        }
-      }
-      return newObj;
-    }
-  }
-}
 
 describe("isotropy-ast-analyzer-fs", () => {
   function run([description, dir, opts]) {
