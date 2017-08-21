@@ -1,5 +1,5 @@
 module.exports = {
-  type: "move",
+  type: "fs_moveFile",
   dir: {
     type: "StringLiteral",
     value: "documents"

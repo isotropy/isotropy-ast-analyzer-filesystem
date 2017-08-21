@@ -1,5 +1,5 @@
 module.exports = {
-  type: "create",
+  type: "fs_create",
   dir: "documents",
   filename: "report.txt",
   contents: "hello, world",

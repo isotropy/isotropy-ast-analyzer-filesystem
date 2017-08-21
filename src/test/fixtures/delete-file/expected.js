@@ -1,5 +1,5 @@
 module.exports = {
-  type: "delete",
+  type: "fs_deleteFile",
   dir: {
     type: "StringLiteral",
     value: "documents"

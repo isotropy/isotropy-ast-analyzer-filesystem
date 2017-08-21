@@ -11,7 +11,7 @@ import {
 import composite from "../chimpanzee-utils/composite";
 import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
-import { move } from "../fs-statements";
+import { moveFile } from "../fs-statements";
 
 export default function(state, analysisState) {
   const spreadFilesNode = {
@@ -163,7 +163,7 @@ export default function(state, analysisState) {
                       keyArray
                         .slice(2)
                         .every((v, i) => remapShouldContain.includes(v))
-                    ? move(
+                    ? moveFile(
                         {
                           [keyArray[0]]: clean(valueArray[0]),
                           [keyArray[1]]: clean(valueArray[1]),

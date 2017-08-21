@@ -1,5 +1,5 @@
 module.exports = {
-  type: "update",
+  type: "fs_update",
   dir: {
     "type": "StringLiteral",
     "value": "documents"

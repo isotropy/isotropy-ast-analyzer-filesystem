@@ -1,5 +1,5 @@
 module.exports = {
-  type: "getFiles",
+  type: "fs_getFiles",
   dir: {
     type: "StringLiteral",
     value: "/some/path"

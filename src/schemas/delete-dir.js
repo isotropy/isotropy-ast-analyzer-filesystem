@@ -11,7 +11,7 @@ import {
 import composite from "../chimpanzee-utils/composite";
 import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
-import { deleteF } from "../fs-statements";
+import { deleteDir } from "../fs-statements";
 
 export default function(state, analysisState) {
   return composite(
@@ -77,7 +77,7 @@ export default function(state, analysisState) {
           ? R.equals(result.value.left, result.value.right)
             ? result.value.args[0].params[0].fsIdentifier1 ===
               result.value.args[0].fsIdentifier2
-              ? deleteF(
+              ? deleteDir(
                   {
                     dir: clean(result.value.args[0].dirNode)
                   },

@@ -11,7 +11,7 @@ import {
 import composite from "../chimpanzee-utils/composite";
 import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
-import { move } from "../fs-statements";
+import { moveDir } from "../fs-statements";
 
 export default function(state, analysisState) {
   const spreadFilesNode = {
@@ -113,7 +113,7 @@ export default function(state, analysisState) {
 
               return R.equals(result.value.left, result.value.right)
                 ? new Set(fsIdentifierArray).size === 1
-                  ? move(
+                  ? moveDir(
                       {
                         dir: clean(result.value.args[0].dirNode),
                         newDir: clean(
