@@ -47,9 +47,9 @@ describe("isotropy-ast-analyzer-fs", () => {
   }
 
   const tests = [
-    ["create", "create"],
-    ["read", "read"],
-    ["update", "update"],
+    ["create-file", "create-file"],
+    ["read-file", "read-file"],
+    ["update-file", "update-file"],
     ["get-files", "get-files"],
     ["getfiles-recursive", "get-files-recursive"],
     ["move-file", "move-file"],
@@ -58,7 +58,6 @@ describe("isotropy-ast-analyzer-fs", () => {
     ["delete-dir", "delete-dir"]
   ];
 
-  debugger;
   for (const test of tests) {
     run(test);
   }

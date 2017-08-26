@@ -28,10 +28,6 @@ export default function(opts) {
           analyze(analyzers.write.analyzeAssignmentExpression, path, state);
         },
 
-        MemberExpression(path, state) {
-          analyze(analyzers.read.analyzeMemberExpression, path, state);
-        },
-
         CallExpression(path, state) {
           analyze(analyzers.read.analyzeCallExpression, path, state);
         }

@@ -6,8 +6,8 @@ export default function(analysisState) {
     analyzeAssignmentExpression(path, state) {
       return makeAnalyzer(
         [
-          schemas.create,
-          schemas.update,
+          schemas.createFile,
+          schemas.updateFile,
           schemas.deleteFile,
           schemas.deleteDir,
           schemas.moveFile,

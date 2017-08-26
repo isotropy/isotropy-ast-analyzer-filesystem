@@ -12,7 +12,7 @@ import {
 import { source } from "../chimpanzee-utils";
 import composite from "../chimpanzee-utils/composite";
 import R from "ramda";
-import { create } from "../fs-statements";
+import { createFile } from "../fs-statements";
 
 export default function(state, analysisState) {
   return composite(
@@ -47,22 +47,7 @@ export default function(state, analysisState) {
                     type: "Identifier",
                     name: capture("key")
                   },
-                  value: any([
-                    mapResult(
-                      {
-                        type: "Identifier",
-                        name: capture("value")
-                      },
-                      s => s.value
-                    ),
-                    mapResult(
-                      {
-                        type: "StringLiteral",
-                        value: capture("value")
-                      },
-                      s => s.value
-                    )
-                  ])
+                  value: capture("value")
                 })
               ])
             }
@@ -84,7 +69,7 @@ export default function(state, analysisState) {
                   keyArray.every((v, i) =>
                     ["contents", "dir", "filename"].includes(v)
                   )
-                  ? create(
+                  ? createFile(
                       {
                         [props[0].key]: props[0].value,
                         [props[1].key]: props[1].value,

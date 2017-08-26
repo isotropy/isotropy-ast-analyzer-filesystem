@@ -1,8 +1,8 @@
 export { default as root } from "./root";
 export { default as collection } from "./collection";
-export { default as create } from "./create";
-export { default as read } from "./read";
-export { default as update } from "./update";
+export { default as createFile } from "./create-file";
+export { default as readFile } from "./read-file";
+export { default as updateFile } from "./update-file";
 export { default as getFiles } from "./get-files";
 export { default as getFilesRecursively } from "./get-files-recursive";
 export { default as moveFile } from "./move-file";

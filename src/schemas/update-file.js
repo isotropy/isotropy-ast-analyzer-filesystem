@@ -11,7 +11,7 @@ import {
 import composite from "../chimpanzee-utils/composite";
 import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
-import { update } from "../fs-statements";
+import { updateFile } from "../fs-statements";
 
 export default function(state, analysisState) {
   const spreadFilesNode = {
@@ -145,7 +145,7 @@ export default function(state, analysisState) {
                 ? new Set(fsIdentifierArray).size === 1
                   ? keyArray[0] !== keyArray[1] &&
                     keyArray.every((v, i) => shouldContain.includes(v))
-                    ? update(
+                    ? updateFile(
                         {
                           [keyArray[0]]: clean(valueArray[0]),
                           [keyArray[1]]: clean(valueArray[1]),

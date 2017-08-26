@@ -11,7 +11,7 @@ import {
 import composite from "../chimpanzee-utils/composite";
 import clean from "../chimpanzee-utils/node-cleaner";
 import R from "ramda";
-import { read } from "../fs-statements";
+import { readFile } from "../fs-statements";
 
 export default function(state, analysisState) {
   return composite(
@@ -92,7 +92,7 @@ export default function(state, analysisState) {
               [props.key1, props.key2].every((v, i) =>
                 ["dir", "filename"].includes(v)
               )
-                ? read(
+                ? readFile(
                     {
                       [props.key1]: clean(props.val1),
                       [props.key2]: clean(props.val2)
