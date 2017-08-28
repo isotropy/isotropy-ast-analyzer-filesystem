@@ -149,7 +149,7 @@ export default function(state, analysisState) {
                         {
                           [keyArray[0]]: clean(valueArray[0]),
                           [keyArray[1]]: clean(valueArray[1]),
-                          content: clean(valueArray[2])
+                          contents: clean(valueArray[2])
                         },
                         {
                           module: fs.module,

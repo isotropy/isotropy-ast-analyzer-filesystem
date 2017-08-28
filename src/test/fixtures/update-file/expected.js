@@ -8,7 +8,7 @@ module.exports = {
     "type": "StringLiteral",
     "value": "report.txt"
   },
-  content: {
+  contents: {
     "type": "StringLiteral",
     "value": "hello, universe"
   },
