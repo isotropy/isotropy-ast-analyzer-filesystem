@@ -11,13 +11,12 @@ export default function(state, analysisState) {
           return importBinding &&
           importBinding.binding.referencePaths.includes(path)
             ? new Match(
-                { identifier: path.node.name, module: importBinding.module },
+                { identifier: path.node.name, module: importBinding.locations },
                 env
               )
             : new Skip(`Did not match any known filesystem modules.`, env);
         })()
       : new Skip(`Root node is not an Identifier`, env);
   };
-
   return identifier;
 }

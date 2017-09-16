@@ -1,10 +1,10 @@
 module.exports = {
   type: "fs_deleteFile",
-  dir: {
+  dirNode: {
     type: "StringLiteral",
     value: "documents"
   },
-  filename: {
+  filenameNode: {
     type: "StringLiteral",
     value: "report.txt"
   },

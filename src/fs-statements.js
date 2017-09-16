@@ -3,33 +3,33 @@ export function createCollection(source) {
 }
 
 export function createFile(args, source) {
-  return { type: "fs_createFile", ...args, ...source }
+  return { type: "createFile", ...args, ...source }
 }
 
 export function deleteFile(args, source) {
-  return { type: "fs_deleteFile", ...args, ...source }
+  return { type: "deleteFile", ...args, ...source }
 }
 
 export function deleteDir(args, source) {
-  return { type: "fs_deleteDir", ...args, ...source }
+  return { type: "deleteDir", ...args, ...source }
 }
 
 export function moveFile(args, source) {
-  return { type: "fs_moveFile", ...args, ...source }
+  return { type: "moveFile", ...args, ...source }
 }
 
 export function moveDir(args, source) {
-  return { type: "fs_moveDir", ...args, ...source }
+  return { type: "moveDir", ...args, ...source }
 }
 
 export function readFile(args, source) {
-  return { type: "fs_readFile", ...args, ...source }
+  return { type: "readFile", ...args, ...source }
 }
 
 export function updateFile(args, source) {
-  return { type: "fs_updateFile", ...args, ...source }
+  return { type: "updateFile", ...args, ...source }
 }
 
 export function getFiles(args, source) {
-  return { type: "fs_getFiles", ...args, ...source }
+  return { type: "getFiles", ...args, ...source }
 }

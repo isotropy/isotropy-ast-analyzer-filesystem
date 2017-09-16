@@ -1,14 +1,14 @@
 module.exports = {
   type: "fs_createFile",
-  dir: {
+  dirNode: {
     type: "StringLiteral",
     value: "documents"
   },
-  filename: {
+  filenameNode: {
     type: "StringLiteral",
     value: "report.txt"
   },
-  contents: {
+  contentsNode: {
     type: "StringLiteral",
     value: "hello, world"
   },

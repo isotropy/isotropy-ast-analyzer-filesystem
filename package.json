@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "test": "mocha dist/test/test.js",
-    "debug": "mocha dist/test/test.js --debug-brk"
+    "debug": "mocha --inspect-brk dist/test/test.js"
   },
   "main": "dist/isotropy-ast-analyzer-fs.js",
   "dependencies": {

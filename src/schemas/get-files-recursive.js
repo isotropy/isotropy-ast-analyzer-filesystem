@@ -112,7 +112,7 @@ export default function(state, analysisState) {
                     },
                     {
                       identifier: fs.identifier,
-                      module: fs.module,
+                      module: fs.module.path,
                       collection: fs.collection
                     }
                   )

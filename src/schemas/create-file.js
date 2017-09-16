@@ -62,22 +62,23 @@ export default function(state, analysisState) {
           ? (() => {
               const source = result.value.left;
               const props = result.value.args[0].properties;
-              const keyArray = [props[0].key, props[1].key, props[2].key];
+              let contentsNode, dirNode, filenameNode;
+              props.forEach(prop => {
+                if (prop.key === "contents") contentsNode = prop.value;
+                if (prop.key === "dir") dirNode = prop.value;
+                if (prop.key === "filename") filenameNode = prop.value;
+              });
               return R.equals(result.value.left, result.value.right)
-                ? props.length === 3 &&
-                  new Set(keyArray).size === 3 &&
-                  keyArray.every((v, i) =>
-                    ["contents", "dir", "filename"].includes(v)
-                  )
+                ? contentsNode && dirNode && filenameNode
                   ? createFile(
                       {
-                        [props[0].key]: props[0].value,
-                        [props[1].key]: props[1].value,
-                        [props[2].key]: props[2].value
+                        contentsNode,
+                        dirNode,
+                        filenameNode
                       },
                       {
                         identifier: source.identifier,
-                        module: source.module,
+                        module: source.module.path,
                         collection: source.collection
                       }
                     )

@@ -79,16 +79,16 @@ export default function(state, analysisState) {
               result.value.args[0].fsIdentifier2
               ? deleteDir(
                   {
-                    dir: clean(result.value.args[0].dirNode)
+                    dirNode: clean(result.value.args[0].dirNode)
                   },
                   {
-                    module: result.value.left.module,
+                    module: result.value.left.module.path,
                     identifier: result.value.left.identifier,
                     collection: result.value.left.collection
                   }
                 )
               : new Skip(
-                  `The result of the filter() must be assigned to the same fs module.`
+                  `The result of the delete() must be assigned to the same fs module.`
                 )
             : new Skip(`Incorrect access variable for array operation`)
           : result;
