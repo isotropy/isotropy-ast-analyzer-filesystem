@@ -1,18 +1,18 @@
 module.exports = {
-  type: "fs_updateFile",
-  dir: {
+  type: "updateFile",
+  dirNode: {
     "type": "StringLiteral",
     "value": "documents"
   },
-  filename: {
+  filenameNode: {
     "type": "StringLiteral",
     "value": "report.txt"
   },
-  contents: {
+  contentsNode: {
     "type": "StringLiteral",
     "value": "hello, universe"
   },
-  module: "todosFsModule",
+  module: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 }

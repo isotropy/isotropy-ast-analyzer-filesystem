@@ -117,7 +117,7 @@ export default function(state, analysisState) {
                         filenameNode
                       },
                       {
-                        module: fs.module.path,
+                        module: fs.module,
                         identifier: fs.identifier,
                         collection: fs.collection
                       }

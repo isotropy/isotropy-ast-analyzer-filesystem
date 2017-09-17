@@ -115,8 +115,8 @@ export default function(state, analysisState) {
                 ? new Set(fsIdentifierArray).size === 1
                   ? moveDir(
                       {
-                        dir: clean(result.value.args[0].dirNode),
-                        newDir: clean(
+                        dirNode: clean(result.value.args[0].dirNode),
+                        newDirNode: clean(
                           result.value.args[0].properties[1].newDirNode
                         )
                       },

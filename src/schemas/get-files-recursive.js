@@ -103,16 +103,16 @@ export default function(state, analysisState) {
           ? (() => {
               const fs = result.value.fs;
               return result.value.args[0].params[0].fsIdentifier1 &&
-              result.value.args[0].body.fsIdentifier2 ===
-                result.value.args[0].body.fsIdentifier3
+                result.value.args[0].body.fsIdentifier2 ===
+                  result.value.args[0].body.fsIdentifier3
                 ? getFiles(
                     {
-                      dir: clean(result.value.args[0].body.dirNode1),
+                      dirNode: clean(result.value.args[0].body.dirNode1),
                       recurse: true
                     },
                     {
                       identifier: fs.identifier,
-                      module: fs.module.path,
+                      module: fs.module,
                       collection: fs.collection
                     }
                   )

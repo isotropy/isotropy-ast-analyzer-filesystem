@@ -65,9 +65,9 @@ export default function(state, analysisState) {
           ? (() => {
               const fs = result.value.fs;
               return result.value.args[0].params[0].fsIdentifier1 ===
-              result.value.args[0].fsIdentifier2
+                result.value.args[0].fsIdentifier2
                 ? getFiles(
-                    { dir: result.value.args[0].val1, recurse: false },
+                    { dirNode: result.value.args[0].val1, recurse: false },
                     {
                       identifier: fs.identifier,
                       module: fs.module,

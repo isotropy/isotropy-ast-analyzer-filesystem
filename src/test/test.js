@@ -32,7 +32,7 @@ describe("isotropy-ast-analyzer-fs", () => {
                   modules: [
                     {
                       source: "fixtures",
-                      locations: [{ name: "docs", path: "/my-fs" }]
+                      locations: [{ name: "docs", path: "home/office/docs" }]
                     }
                   ]
                 }
@@ -54,15 +54,15 @@ describe("isotropy-ast-analyzer-fs", () => {
   }
 
   const tests = [
-    // ["create-file", "create-file"],
-    // ["read-file", "read-file"],
-    // ["update-file", "update-file"],
-    // ["get-files", "get-files"],
-    // ["getfiles-recursive", "get-files-recursive"],
-    // ["move-file", "move-file"],
-    // ["move-dir", "move-dir"],
-    // ["delete-file", "delete-file"],
-    // ["delete-dir", "delete-dir"]
+    ["create-file", "create-file"],
+    ["read-file", "read-file"],
+    ["update-file", "update-file"],
+    ["get-files", "get-files"],
+    ["getfiles-recursive", "get-files-recursive"],
+    ["move-file", "move-file"],
+    ["move-dir", "move-dir"],
+    ["delete-file", "delete-file"],
+    ["delete-dir", "delete-dir"]
   ];
 
   for (const test of tests) {

@@ -1,11 +1,11 @@
 module.exports = {
-  type: "fs_getFiles",
-  dir: {
+  type: "getFiles",
+  dirNode: {
     type: "StringLiteral",
     value: "/some/path"
   },
   recurse: false,
-  module: "todosFsModule",
+  module: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

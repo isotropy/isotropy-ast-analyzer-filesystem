@@ -78,7 +78,7 @@ export default function(state, analysisState) {
                       },
                       {
                         identifier: source.identifier,
-                        module: source.module.path,
+                        module: source.module,
                         collection: source.collection
                       }
                     )

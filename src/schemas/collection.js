@@ -24,7 +24,7 @@ export default function(state, analysisState) {
               // Returns only the module location associated with the identified collection
               module: result.value.root.module.find(
                 m => m.name === result.value.collection
-              ),
+              ).path,
               collection: result.value.collection
             })
           : result;

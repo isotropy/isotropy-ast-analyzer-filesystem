@@ -11,7 +11,7 @@ export default function(state, analysisState) {
           return importBinding &&
           importBinding.binding.referencePaths.includes(path)
             ? new Match(
-                { identifier: path.node.name, module: importBinding.locations },
+                { identifier: path.node.name, module: importBinding.module },
                 env
               )
             : new Skip(`Did not match any known filesystem modules.`, env);

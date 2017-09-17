@@ -1,5 +1,5 @@
 module.exports = {
-  type: "fs_createFile",
+  type: "createFile",
   dirNode: {
     type: "StringLiteral",
     value: "documents"
@@ -12,7 +12,7 @@ module.exports = {
     type: "StringLiteral",
     value: "hello, world"
   },
-  module: "todosFsModule",
+  module: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

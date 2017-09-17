@@ -1,10 +1,10 @@
 module.exports = {
-  type: "fs_deleteDir",
-  dir: {
+  type: "deleteDir",
+  dirNode: {
     type: "StringLiteral",
     value: "documents"
   },
-  module: "todosFsModule",
+  module: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

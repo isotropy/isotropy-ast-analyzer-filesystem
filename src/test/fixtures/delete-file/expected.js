@@ -1,5 +1,5 @@
 module.exports = {
-  type: "fs_deleteFile",
+  type: "deleteFile",
   dirNode: {
     type: "StringLiteral",
     value: "documents"
@@ -8,7 +8,7 @@ module.exports = {
     type: "StringLiteral",
     value: "report.txt"
   },
-  module: "todosFsModule",
+  module: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

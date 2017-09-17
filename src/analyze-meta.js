@@ -3,7 +3,8 @@ import path from "path";
 export default function(analysisState) {
   return {
     analyzeImportDeclaration(babelPath, state) {
-      debugger;
+      // Incorrect config
+      if (!state.opts.projects) return false;
 
       const moduleName = babelPath.get("source").node.value;
       const resolvedName = path.resolve(
@@ -21,6 +22,7 @@ export default function(analysisState) {
         return resolvedName.startsWith(absolutePath);
       });
 
+      // Not a fs project
       if (!fsProject) return false;
       fsProject.absolutePath = absolutePath;
 
@@ -30,15 +32,13 @@ export default function(analysisState) {
         return resolvedName.startsWith(absolutePath);
       });
 
+      // Current path not listed in modules
       if (!fsModule) return false;
       fsModule.absolutePath = absolutePath;
 
       const specifier = babelPath.get("specifiers.0").node.local.name;
       analysisState.importBindings = analysisState.importBindings.concat({
-        locations: fsModule.locations.map(location => ({
-          ...location,
-          path: (fsModule.absolutePath + location.path).replace(/\/\//g, "/")
-        })),
+        module: fsModule.locations,
         binding: babelPath.scope.bindings[specifier]
       });
       return true;

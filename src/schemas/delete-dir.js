@@ -76,13 +76,13 @@ export default function(state, analysisState) {
         return result instanceof Match
           ? R.equals(result.value.left, result.value.right)
             ? result.value.args[0].params[0].fsIdentifier1 ===
-              result.value.args[0].fsIdentifier2
+                result.value.args[0].fsIdentifier2
               ? deleteDir(
                   {
                     dirNode: clean(result.value.args[0].dirNode)
                   },
                   {
-                    module: result.value.left.module.path,
+                    module: result.value.left.module,
                     identifier: result.value.left.identifier,
                     collection: result.value.left.collection
                   }
