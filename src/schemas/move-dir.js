@@ -102,7 +102,7 @@ export default function(state, analysisState) {
       build: obj => context => result => {
         return result instanceof Match
           ? (() => {
-              debugger;
+	      debugger;
               const fsIdentifierArray = [
                 result.value.args[0].params[0].fsIdentifier1,
                 result.value.args[0].fsIdentifier2,

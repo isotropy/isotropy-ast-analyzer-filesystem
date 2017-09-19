@@ -11,7 +11,6 @@ export default function(analysisState) {
         path.dirname(state.file.opts.filename),
         moduleName
       );
-
       let absolutePath = null;
 
       const fsProject = state.opts.projects.find(project => {
@@ -26,15 +25,11 @@ export default function(analysisState) {
       if (!fsProject) return false;
       fsProject.absolutePath = absolutePath;
 
-      const fsModule = fsProject.modules.find(m => {
-        absolutePath =
-          (fsProject.absolutePath + m.source).replace(/\/\//g, "/") + "/";
-        return resolvedName.startsWith(absolutePath);
-      });
+      const fsModule = fsProject.modules.find(
+        m => fsProject.absolutePath + m.source === resolvedName
+      );
 
-      // Current path not listed in modules
       if (!fsModule) return false;
-      fsModule.absolutePath = absolutePath;
 
       const specifier = babelPath.get("specifiers.0").node.local.name;
       analysisState.importBindings = analysisState.importBindings.concat({
