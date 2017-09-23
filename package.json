@@ -10,7 +10,7 @@
     "test": "mocha dist/test/test.js",
     "debug": "mocha --inspect-brk dist/test/test.js"
   },
-  "main": "dist/isotropy-ast-analyzer-fs.js",
+  "main": "dist/index.js",
   "dependencies": {
     "chimpanzee": "0.0.50",
     "lazily": "^0.0.17",
