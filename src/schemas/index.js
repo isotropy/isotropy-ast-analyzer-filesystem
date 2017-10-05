@@ -9,3 +9,5 @@ export { default as moveFile } from "./move-file";
 export { default as moveDir } from "./move-dir";
 export { default as deleteFile } from "./delete-file";
 export { default as deleteDir } from "./delete-dir";
+export { default as readError } from "./read-error";
+export { default as writeError } from "./write-error";

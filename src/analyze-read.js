@@ -5,7 +5,12 @@ export default function(analysisState) {
   return {
     analyzeCallExpression(path, state) {
       return makeAnalyzer(
-        [schemas.readFile, schemas.getFiles, schemas.getFilesRecursively],
+        [
+          schemas.readFile,
+          schemas.getFiles,
+          schemas.getFilesRecursively,
+          schemas.readError
+        ],
         path,
         state,
         analysisState

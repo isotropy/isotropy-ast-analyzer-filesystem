@@ -11,7 +11,8 @@ export default function(analysisState) {
           schemas.deleteFile,
           schemas.deleteDir,
           schemas.moveFile,
-          schemas.moveDir
+          schemas.moveDir,
+          schemas.writeError
         ],
         path,
         state,

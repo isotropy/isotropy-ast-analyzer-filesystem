@@ -17,39 +17,50 @@ describe("isotropy-ast-analyzer-fs", () => {
         dir,
         `fixture.js`
       );
-      const outputPath = path.resolve(__dirname, "fixtures", dir, `output.js`);
-      const expected = require(`./fixtures/${dir}/expected`);
+
       const pluginInfo = makePlugin(opts);
 
-      const babelResult = babel.transformFileSync(fixturePath, {
-        plugins: [
-          [
-            pluginInfo.plugin,
-            {
-              projects: [
-                {
-                  dir: "dist/test",
-                  modules: [
-                    {
-                      source: "fixtures/my-fs",
-                      locations: [{ name: "docs", path: "home/office/docs" }]
-                    }
-                  ]
-                }
-              ]
-            }
+      const callWrapper = () => {
+        babel.transformFileSync(fixturePath, {
+          plugins: [
+            [
+              pluginInfo.plugin,
+              {
+                projects: [
+                  {
+                    dir: "dist/test",
+                    modules: [
+                      {
+                        source: "fixtures/my-fs",
+                        locations: [{ name: "docs", path: "home/office/docs" }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "transform-object-rest-spread"
           ],
-          "transform-object-rest-spread"
-        ],
-        parserOpts: {
-          sourceType: "module",
-          allowImportExportEverywhere: true
-        },
-        babelrc: false
-      });
-      const result = pluginInfo.getResult();
-      const actual = clean(result.analysis);
-      actual.should.deepEqual(expected);
+          parserOpts: {
+            sourceType: "module",
+            allowImportExportEverywhere: true
+          },
+          babelrc: false
+        });
+        pluginInfo.getResult();
+      };
+
+      return dir.includes("error")
+        ? should(() => callWrapper()).throw(
+            /Compilation failed. Not a valid isotropy operation./
+          )
+        : (() => {
+            callWrapper();
+            const expected = require(`./fixtures/${dir}/expected`);
+            const result = pluginInfo.getResult();
+            const actual = clean(result.analysis);
+            actual.should.deepEqual(expected);
+          })();
     });
   }
 
@@ -62,7 +73,9 @@ describe("isotropy-ast-analyzer-fs", () => {
     ["move-file", "move-file"],
     ["move-dir", "move-dir"],
     ["delete-file", "delete-file"],
-    ["delete-dir", "delete-dir"]
+    ["delete-dir", "delete-dir"],
+    ["write-error", "write-error"],
+    ["read-error", "read-error"]
   ];
 
   for (const test of tests) {
