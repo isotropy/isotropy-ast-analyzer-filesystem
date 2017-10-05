@@ -47,7 +47,7 @@ describe("isotropy-ast-analyzer-fs", () => {
           },
           babelrc: false
         });
-        pluginInfo.getResult();
+        return pluginInfo.getResult();
       };
 
       return dir.includes("error")
@@ -55,9 +55,8 @@ describe("isotropy-ast-analyzer-fs", () => {
             /Compilation failed. Not a valid isotropy operation./
           )
         : (() => {
-            callWrapper();
             const expected = require(`./fixtures/${dir}/expected`);
-            const result = pluginInfo.getResult();
+            const result = callWrapper();
             const actual = clean(result.analysis);
             actual.should.deepEqual(expected);
           })();
