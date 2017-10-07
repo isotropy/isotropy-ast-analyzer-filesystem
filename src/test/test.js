@@ -8,7 +8,7 @@ import clean from "../chimpanzee-utils/node-cleaner";
 
 sourceMapSupport.install();
 
-describe("isotropy-ast-analyzer-fs", () => {
+describe("isotropy-ast-analyzer-filesystem", () => {
   function run([description, dir, opts]) {
     it(`${description}`, () => {
       const fixturePath = path.resolve(

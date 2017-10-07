@@ -1,10 +1,10 @@
 {
-  "name": "isotropy-ast-analyzer-fs",
+  "name": "isotropy-ast-analyzer-filesystem",
   "version": "0.0.3",
-  "author": "Arivanandan<uarivanandan@gmail.com>",
+  "author": "Isotropy Team<isotropy@agilehead.com>",
   "contributors": [
-    "Jeswin Kumar<jeswinpk@agilehead.com>",
-    "Arivanandan<uarivanandan@gmail.com>"
+    "Arivanandan<uarivanandan@gmail.com>",
+    "Jeswin Kumar<jeswinpk@agilehead.com>"
   ],
   "scripts": {
     "test": "mocha dist/test/test.js",
