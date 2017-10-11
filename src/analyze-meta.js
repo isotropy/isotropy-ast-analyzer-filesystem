@@ -6,13 +6,11 @@ export default function(analysisState) {
       // Incorrect config
       if (!state.opts.projects) return false;
 
-      let absolutePath = null;
-
       const fsProject = state.opts.projects.find(project => {
         const projectDir = project.dir.startsWith("./")
           ? project.dir
           : "./" + project.dir;
-        absolutePath = path.resolve(projectDir) + "/";
+        const absolutePath = path.resolve(projectDir) + "/";
         return state.file.opts.filename.startsWith(absolutePath);
       });
 
@@ -25,11 +23,15 @@ export default function(analysisState) {
         moduleName
       );
 
-      fsProject.absolutePath = absolutePath;
+      debugger;
 
-      const fsModule = fsProject.modules.find(
-        m => fsProject.absolutePath + m.source === resolvedName
-      );
+      const fsModule = fsProject.modules.find(m => {
+        const sourceDir = m.source.startsWith("./")
+          ? m.source
+          : "./" + m.source;
+        const absolutePath = path.resolve(sourceDir);
+        return absolutePath === resolvedName;
+      });
 
       if (!fsModule) return false;
 
