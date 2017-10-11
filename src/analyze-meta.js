@@ -6,11 +6,6 @@ export default function(analysisState) {
       // Incorrect config
       if (!state.opts.projects) return false;
 
-      const moduleName = babelPath.get("source").node.value;
-      const resolvedName = path.resolve(
-        path.dirname(state.file.opts.filename),
-        moduleName
-      );
       let absolutePath = null;
 
       const fsProject = state.opts.projects.find(project => {
@@ -18,11 +13,18 @@ export default function(analysisState) {
           ? project.dir
           : "./" + project.dir;
         absolutePath = path.resolve(projectDir) + "/";
-        return resolvedName.startsWith(absolutePath);
+        return state.file.opts.filename.startsWith(absolutePath);
       });
 
       // Not a fs project
       if (!fsProject) return false;
+
+      const moduleName = babelPath.get("source").node.value;
+      const resolvedName = path.resolve(
+        path.dirname(state.file.opts.filename),
+        moduleName
+      );
+
       fsProject.absolutePath = absolutePath;
 
       const fsModule = fsProject.modules.find(
