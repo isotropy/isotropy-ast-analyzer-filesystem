@@ -21,15 +21,13 @@ export default function(analysisState) {
       const resolvedName = path.resolve(
         path.dirname(state.file.opts.filename),
         moduleName
-      );
-
-      debugger;
+      ) + "/";
 
       const fsModule = fsProject.modules.find(m => {
         const sourceDir = m.source.startsWith("./")
           ? m.source
           : "./" + m.source;
-        const absolutePath = path.resolve(sourceDir);
+        const absolutePath = path.resolve(sourceDir) + "/";
         return absolutePath === resolvedName;
       });
 
