@@ -1,11 +1,11 @@
 module.exports = {
   type: "getFiles",
-  dirNode: {
+  dir: {
     type: "StringLiteral",
     value: "/some/path"
   },
   recurse: false,
-  module: "home/office/docs",
+  location: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

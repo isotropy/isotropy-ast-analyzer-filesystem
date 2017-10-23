@@ -58,23 +58,24 @@ export default function(state, analysisState) {
     },
     {
       build: obj => context => result => {
-        return result instanceof Match
+        debugger;
+        return  result instanceof Match
           ? (() => {
               const source = result.value.left;
               const props = result.value.args[0].properties;
-              let contentsNode, dirNode, filenameNode;
+              let contents, dir, filename;
               props.forEach(prop => {
-                if (prop.key === "contents") contentsNode = prop.value;
-                if (prop.key === "dir") dirNode = prop.value;
-                if (prop.key === "filename") filenameNode = prop.value;
+                if (prop.key === "contents") contents = prop.value;
+                if (prop.key === "dir") dir = prop.value;
+                if (prop.key === "filename") filename = prop.value;
               });
               return R.equals(result.value.left, result.value.right)
-                ? contentsNode && dirNode && filenameNode
+                ? contents && dir && filename
                   ? createFile(
                       {
-                        contentsNode,
-                        dirNode,
-                        filenameNode
+                        contents,
+                        dir,
+                        filename
                       },
                       {
                         identifier: source.identifier,

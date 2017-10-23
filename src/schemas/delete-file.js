@@ -97,24 +97,24 @@ export default function(state, analysisState) {
           ? (() => {
               const props = result.value.args[0];
               const fs = result.value.left;
-              let dirNode, filenameNode;
+              let dir, filename;
               if (props.key1 === "dir") {
-                dirNode = clean(props.val1);
-                filenameNode = clean(props.val2);
+                dir = clean(props.val1);
+                filename = clean(props.val2);
               }
               if (props.key1 === "filename") {
-                filenameNode = clean(props.val1);
-                dirNode = clean(props.val2);
+                filename = clean(props.val1);
+                dir = clean(props.val2);
               }
               return R.equals(result.value.left, result.value.right)
                 ? props.params[0].fsIdentifier1 === props.fsIdentifier2 &&
                     props.fsIdentifier2 === props.fsIdentifier3 &&
-                    dirNode &&
-                    filenameNode
+                    dir &&
+                    filename
                   ? deleteFile(
                       {
-                        dirNode,
-                        filenameNode
+                        dir,
+                        filename
                       },
                       {
                         module: fs.module,

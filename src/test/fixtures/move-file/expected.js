@@ -1,22 +1,22 @@
 module.exports = {
   type: "moveFile",
-  dirNode: {
+  dir: {
     type: "StringLiteral",
     value: "documents"
   },
-  filenameNode: {
+  filename: {
     type: "StringLiteral",
     value: "report.txt"
   },
-  newDirNode: {
+  newdir: {
     type: "StringLiteral",
     value: "reports"
   },
-  newFilenameNode: {
+  newfilename: {
     type: "StringLiteral",
     value: "report.txt"
   },
-  module: "home/office/docs",
+  location: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

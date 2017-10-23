@@ -1,14 +1,14 @@
 module.exports = {
   type: "moveDir",
-  dirNode: {
+  dir: {
     type: "StringLiteral",
     value: "documents"
   },
-  newDirNode: {
+  newdir: {
     type: "StringLiteral",
     value: "reports"
   },
-  module: "home/office/docs",
+  location: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

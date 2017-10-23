@@ -1,14 +1,14 @@
 module.exports = {
   type: "readFile",
-  dirNode: {
+  dir: {
     type: "StringLiteral",
     value: "/some/path"
   },
-  filenameNode: {
+  filename: {
     type: "StringLiteral",
     value: "report.txt"
   },
-  module: "home/office/docs",
+  location: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

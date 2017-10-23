@@ -153,10 +153,10 @@ export default function(state, analysisState) {
                       toKeyValueMap.filename
                     ? moveFile(
                         {
-                          dirNode: clean(fromKeyValueMap.dir),
-                          filenameNode: clean(fromKeyValueMap.filename),
-                          newDirNode: clean(toKeyValueMap.dir),
-                          newFilenameNode: clean(toKeyValueMap.filename)
+                          dir: clean(fromKeyValueMap.dir),
+                          filename: clean(fromKeyValueMap.filename),
+                          newdir: clean(toKeyValueMap.dir),
+                          newfilename: clean(toKeyValueMap.filename)
                         },
                         {
                           module: fs.module,

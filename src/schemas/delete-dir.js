@@ -62,7 +62,7 @@ export default function(state, analysisState) {
                     }
                   },
                   operator: "===",
-                  right: capture("dirNode")
+                  right: capture("dir")
                 }
               }
             }
@@ -79,7 +79,7 @@ export default function(state, analysisState) {
                 result.value.args[0].fsIdentifier2
               ? deleteDir(
                   {
-                    dirNode: clean(result.value.args[0].dirNode)
+                    dir: clean(result.value.args[0].dir)
                   },
                   {
                     module: result.value.left.module,

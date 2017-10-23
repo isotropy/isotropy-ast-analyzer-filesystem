@@ -141,7 +141,7 @@ export default function(state, analysisState) {
 
               const { dir, filename } = keyValueMap;
 
-              const contentsNode = clean(
+              const contents = clean(
                 result.value.args[0].properties[1].newContentNode
               );
 
@@ -152,9 +152,9 @@ export default function(state, analysisState) {
                   ? dir && filename && contentNode
                     ? updateFile(
                         {
-                          dirNode: dir,
-                          filenameNode: filename,
-                          contentsNode
+                          dir: dir,
+                          filename: filename,
+                          contents
                         },
                         {
                           module: fs.module,

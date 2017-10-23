@@ -22,13 +22,13 @@ export default function(state, analysisState) {
     }
   };
 
-  const dirNode = {
+  const dir = {
     type: "ObjectProperty",
     key: {
       type: "Identifier",
       name: "dir"
     },
-    value: capture("newDirNode")
+    value: capture("newdir")
   };
 
   return composite(
@@ -78,13 +78,13 @@ export default function(state, analysisState) {
                     }
                   },
                   operator: "===",
-                  right: capture("dirNode")
+                  right: capture("dir")
                 },
                 consequent: {
                   type: "ObjectExpression",
                   properties: any([
-                    [spreadFilesNode, dirNode],
-                    [dirNode, spreadFilesNode]
+                    [spreadFilesNode, dir],
+                    [dir, spreadFilesNode]
                   ])
                 },
                 alternate: {
@@ -115,9 +115,9 @@ export default function(state, analysisState) {
                 ? new Set(fsIdentifierArray).size === 1
                   ? moveDir(
                       {
-                        dirNode: clean(result.value.args[0].dirNode),
-                        newDirNode: clean(
-                          result.value.args[0].properties[1].newDirNode
+                        dir: clean(result.value.args[0].dir),
+                        newdir: clean(
+                          result.value.args[0].properties[1].newdir
                         )
                       },
                       {

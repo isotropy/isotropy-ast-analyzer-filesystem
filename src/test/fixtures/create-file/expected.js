@@ -1,18 +1,18 @@
 module.exports = {
   type: "createFile",
-  dirNode: {
+  dir: {
     type: "StringLiteral",
     value: "documents"
   },
-  filenameNode: {
+  filename: {
     type: "StringLiteral",
     value: "report.txt"
   },
-  contentsNode: {
+  contents: {
     type: "StringLiteral",
     value: "hello, world"
   },
-  module: "home/office/docs",
+  location: "home/office/docs",
   identifier: "myFs",
   collection: "docs"
 };

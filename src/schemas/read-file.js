@@ -98,8 +98,8 @@ export default function(state, analysisState) {
                 filename
                 ? readFile(
                     {
-                      dirNode: dir,
-                      filenameNode: filename
+                      dir: dir,
+                      filename: filename
                     },
                     {
                       identifier: fs.identifier,

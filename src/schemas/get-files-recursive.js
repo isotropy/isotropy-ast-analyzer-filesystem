@@ -28,7 +28,7 @@ export default function(state, analysisState) {
       }
     },
     operator: "===",
-    right: capture("dirNode1")
+    right: capture("dir1")
   };
 
   const dirStartsWith = {
@@ -51,7 +51,7 @@ export default function(state, analysisState) {
         name: "startsWith"
       }
     },
-    arguments: [capture("dirNode2")]
+    arguments: [capture("dir2")]
   };
 
   return composite(
@@ -107,7 +107,7 @@ export default function(state, analysisState) {
                   result.value.args[0].body.fsIdentifier3
                 ? getFiles(
                     {
-                      dirNode: clean(result.value.args[0].body.dirNode1),
+                      dir: clean(result.value.args[0].body.dir1),
                       recurse: true
                     },
                     {
