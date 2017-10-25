@@ -1,18 +1,28 @@
 module.exports = {
-  type: "createFile",
-  dir: {
-    type: "StringLiteral",
-    value: "documents"
-  },
-  filename: {
-    type: "StringLiteral",
-    value: "report.txt"
-  },
-  contents: {
-    type: "StringLiteral",
-    value: "hello, world"
-  },
-  location: "home/office/docs",
+  operation: "create-file",
+  path: "home/office/docs",
   identifier: "myFS",
-  collection: "docs"
+  files: {
+    type: "ObjectExpression",
+    properties: [
+      {
+        type: "ObjectProperty",
+        method: false,
+        key: { type: "Identifier", name: "dir" },
+        value: { type: "StringLiteral", value: "documents" }
+      },
+      {
+        type: "ObjectProperty",
+        method: false,
+        key: { type: "Identifier", name: "filename" },
+        value: { type: "StringLiteral", value: "report.txt" }
+      },
+      {
+        type: "ObjectProperty",
+        method: false,
+        key: { type: "Identifier", name: "contents" },
+        value: { type: "StringLiteral", value: "hello, world" }
+      }
+    ]
+  }
 };

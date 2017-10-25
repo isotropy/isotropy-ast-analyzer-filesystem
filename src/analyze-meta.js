@@ -31,7 +31,6 @@ export default function(analysisState) {
                     return absolutePath === resolvedName;
                   });
 
-                  debugger;
                   return !module
                     ? false
                     : (() => {

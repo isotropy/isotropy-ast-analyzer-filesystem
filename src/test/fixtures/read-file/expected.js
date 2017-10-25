@@ -1,5 +1,5 @@
 module.exports = {
-  type: "readFile",
+  operation: "read-file",
   dir: {
     type: "StringLiteral",
     value: "/some/path"

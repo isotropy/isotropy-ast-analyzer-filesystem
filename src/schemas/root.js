@@ -9,8 +9,6 @@ export default function(state, analysisState) {
             b => b.binding.identifier.name === path.node.name
           );
 
-          console.log(importBinding);
-
           return importBinding &&
             importBinding.binding.referencePaths.includes(path)
             ? new Match(

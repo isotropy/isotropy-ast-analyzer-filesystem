@@ -9,10 +9,8 @@ import {
   wrap,
   Skip
 } from "chimpanzee";
-import { source } from "../chimpanzee-utils";
-import composite from "../chimpanzee-utils/composite";
+import { source, composite } from "isotropy-analyzer-utils";
 import R from "ramda";
-import { createFile } from "../fs-statements";
 
 export default function(state, analysisState) {
   return composite(
@@ -36,15 +34,16 @@ export default function(state, analysisState) {
             name: "concat"
           }
         },
-        arguments: capture()
+        arguments: [capture()]
       }
     },
     {
       build: obj => context => result =>
-        result instanceof Match 
+        result instanceof Match
           ? {
-              ...result.value.right.object,
-              files: arguments
+              ...result.value.right,
+              operation: "create-file",
+              files: result.value.arguments[0]
             }
           : result
     }

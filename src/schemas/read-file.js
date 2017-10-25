@@ -8,10 +8,8 @@ import {
   Match,
   Skip
 } from "chimpanzee";
-import composite from "../chimpanzee-utils/composite";
-import clean from "../chimpanzee-utils/node-cleaner";
+import { source, composite, clean } from "isotropy-analyzer-utils";
 import R from "ramda";
-import { readFile } from "../fs-statements";
 
 export default function(state, analysisState) {
   return composite(
@@ -32,48 +30,70 @@ export default function(state, analysisState) {
         [
           {
             type: "ArrowFunctionExpression",
-            params: [
-              {
-                type: "Identifier",
-                name: capture("fsIdentifier1")
-              }
-            ],
-            body: {
-              type: "LogicalExpression",
-              left: {
-                type: "BinaryExpression",
-                left: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "Identifier",
-                    name: capture("fsIdentifier2")
+            params: [capture("param")],
+            body:
+              any[
+                ({
+                  type: "LogicalExpression",
+                  left: {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: capture("leftIdentifier"),
+                      property: {
+                        type: "Identifier",
+                        name: "filename"
+                      }
+                    },
+                    operator: "===",
+                    right: capture("filename")
                   },
-                  property: {
-                    type: "Identifier",
-                    name: capture("key1")
+                  operator: "&&",
+                  right: {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: capture("rightIdentifier"),
+                      property: {
+                        type: "Identifier",
+                        name: capture("dir")
+                      }
+                    },
+                    operator: "===",
+                    right: capture("dir")
                   }
                 },
-                operator: "===",
-                right: capture("val1")
-              },
-              operator: "&&",
-              right: {
-                type: "BinaryExpression",
-                left: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "Identifier",
-                    name: capture("fsIdentifier3")
+                {
+                  type: "LogicalExpression",
+                  left: {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: capture("leftIdentifier"),
+                      property: {
+                        type: "Identifier",
+                        name: "dir"
+                      }
+                    },
+                    operator: "===",
+                    right: capture("dir")
                   },
-                  property: {
-                    type: "Identifier",
-                    name: capture("key2")
+                  operator: "&&",
+                  right: {
+                    type: "BinaryExpression",
+                    left: {
+                      type: "MemberExpression",
+                      object: capture("rightIdentifier"),
+                      property: {
+                        type: "Identifier",
+                        name: capture("filename")
+                      }
+                    },
+                    operator: "===",
+                    right: capture("filename")
                   }
-                },
-                operator: "===",
-                right: capture("val2")
-              }
-            }
+                })
+              ]
           }
         ],
         { key: "args" }
@@ -83,6 +103,7 @@ export default function(state, analysisState) {
       build: obj => context => result =>
         result instanceof Match
           ? (() => {
+              debugger;
               const props = result.value.args[0];
               const fs = result.value.fs;
 

@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import makePlugin from "./plugin";
 import sourceMapSupport from "source-map-support";
-import clean from "../chimpanzee-utils/node-cleaner";
+import * as utils from "isotropy-plugin-dev-utils";
 
 sourceMapSupport.install();
 
@@ -59,24 +59,22 @@ describe("isotropy-ast-analyzer-filesystem", () => {
         : (() => {
             const expected = require(`./fixtures/${dir}/expected`);
             const result = callWrapper();
-            const actual = clean(result.analysis);
+            const actual = utils.astCleaner.clean(result.analysis);
             actual.should.deepEqual(expected);
           })();
     });
   }
 
   const tests = [
-    ["create-file", "create-file"]
-    // ["read-file", "read-file"],
-    // ["update-file", "update-file"],
+    ["create-file", "create-file"],
+    // ["delete-file", "delete-file"],
+    // ["delete-dir", "delete-dir"],
     // ["get-files", "get-files"],
     // ["getfiles-recursive", "get-files-recursive"],
     // ["move-file", "move-file"],
     // ["move-dir", "move-dir"],
-    // ["delete-file", "delete-file"],
-    // ["delete-dir", "delete-dir"],
-    // ["write-error", "write-error"],
-    // ["read-error", "read-error"]
+    ["read-file", "read-file"],
+    // ["update-file", "update-file"],
   ];
 
   for (const test of tests) {

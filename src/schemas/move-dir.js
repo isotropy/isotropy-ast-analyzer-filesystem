@@ -8,8 +8,7 @@ import {
   Match,
   Skip
 } from "chimpanzee";
-import composite from "../chimpanzee-utils/composite";
-import clean from "../chimpanzee-utils/node-cleaner";
+import { source, composite, clean } from "isotropy-analyzer-utils";
 import R from "ramda";
 import { moveDir } from "../fs-statements";
 
