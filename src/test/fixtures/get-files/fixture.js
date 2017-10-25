@@ -1,5 +1,5 @@
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function getFiles() {
-  return myFs.docs.filter(file => file.dir === "/some/path");
+  return myFS.docs.filter(file => file.dir === "/some/path");
 }

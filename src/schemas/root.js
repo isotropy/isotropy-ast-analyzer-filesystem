@@ -8,10 +8,16 @@ export default function(state, analysisState) {
           const importBinding = analysisState.importBindings.find(
             b => b.binding.identifier.name === path.node.name
           );
+
+          console.log(importBinding);
+
           return importBinding &&
-          importBinding.binding.referencePaths.includes(path)
+            importBinding.binding.referencePaths.includes(path)
             ? new Match(
-                { identifier: path.node.name, module: importBinding.module },
+                {
+                  identifier: path.node.name,
+                  locations: importBinding.module.locations
+                },
                 env
               )
             : new Skip(`Did not match any known filesystem modules.`, env);

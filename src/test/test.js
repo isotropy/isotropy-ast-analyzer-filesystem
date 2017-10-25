@@ -32,7 +32,9 @@ describe("isotropy-ast-analyzer-filesystem", () => {
                     modules: [
                       {
                         source: "dist/test/fixtures/my-fs",
-                        locations: [{ name: "docs", path: "home/office/docs" }]
+                        locations: {
+                          docs: { path: "home/office/docs" }
+                        }
                       }
                     ]
                   }
@@ -64,7 +66,7 @@ describe("isotropy-ast-analyzer-filesystem", () => {
   }
 
   const tests = [
-    ["create-file", "create-file"],
+    ["create-file", "create-file"]
     // ["read-file", "read-file"],
     // ["update-file", "update-file"],
     // ["get-files", "get-files"],

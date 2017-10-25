@@ -1,7 +1,7 @@
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function moveDir() {
-  myFs.docs = myFs.docs.map(
+  myFS.docs = myFS.docs.map(
     file => (file.dir === "documents" ? { ...file, dir: "reports" } : file)
   );
 }

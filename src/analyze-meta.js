@@ -4,10 +4,7 @@ export default function(analysisState) {
   return {
     analyzeImportDeclaration(babelPath, state) {
       return !state.opts.projects
-        ? {
-            error:
-              "We don't understand your configuration! Please check your .babelrc."
-          }
+        ? false
         : (() => {
             const fsProject = state.opts.projects.find(project => {
               const projectDir = project.dir.startsWith("./")
@@ -18,10 +15,7 @@ export default function(analysisState) {
             });
 
             return !fsProject
-              ? {
-                  skip:
-                    "This folder is not specified for transpilation in the config."
-                }
+              ? false
               : (() => {
                   const moduleName = babelPath.get("source").node.value;
                   const resolvedName = path.resolve(
@@ -29,24 +23,23 @@ export default function(analysisState) {
                     moduleName
                   );
 
-                  const fsModule = fsProject.modules.find(m => {
+                  const module = fsProject.modules.find(m => {
                     const sourceDir = m.source.startsWith("./")
                       ? m.source
                       : "./" + m.source;
-                    const absolutePath = path.resolve(sourceDir) + "/";
+                    const absolutePath = path.resolve(sourceDir);
                     return absolutePath === resolvedName;
                   });
 
-                  return !fsModule
-                    ? {
-                        skip: "This import is not what we are looking for."
-                      }
+                  debugger;
+                  return !module
+                    ? false
                     : (() => {
                         const specifier = babelPath.get("specifiers.0").node
                           .local.name;
                         analysisState.importBindings = analysisState.importBindings.concat(
                           {
-                            module: fsModule.locations,
+                            module,
                             binding: babelPath.scope.bindings[specifier]
                           }
                         );

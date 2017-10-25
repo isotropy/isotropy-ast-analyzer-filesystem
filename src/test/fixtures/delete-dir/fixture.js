@@ -1,5 +1,5 @@
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function deleteDir() {
-  myFs.docs = myFs.docs.filter(file => !(file.dir === "documents"));
+  myFS.docs = myFS.docs.filter(file => !(file.dir === "documents"));
 }

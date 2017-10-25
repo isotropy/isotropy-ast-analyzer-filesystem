@@ -7,6 +7,7 @@
     "Jeswin Kumar<jeswinpk@agilehead.com>"
   ],
   "scripts": {
+    "build": "./build.sh",
     "test": "mocha dist/test/test.js",
     "debug": "mocha --inspect-brk dist/test/test.js"
   },

@@ -17,10 +17,10 @@ export default [
 
 Create a file
 ```javascript
-import myFs from "./my-fs.js";
+import myFS from "./my-fs.js";
 
 async function createFile() {
-  myFs.docs = myFs.docs.concat({
+  myFS.docs = myFS.docs.concat({
     dir: "documents",
     filename: "report.txt",
     contents: "hello, world"
@@ -31,28 +31,28 @@ async function createFile() {
 
 Read a file
 ```javascript
-import myFs from "./my-fs.js";
+import myFS from "./my-fs.js";
 
 async function readFile() {
-  return myFs.docs.find(file => file.dir === "/some/path" && file.filename === "report.txt");
+  return myFS.docs.find(file => file.dir === "/some/path" && file.filename === "report.txt");
 }
 ```
 
 Get all files in a directory
 ```javascript
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function getFiles() {
-  return myFs.docs.filter(file => file.dir === "/some/path");
+  return myFS.docs.filter(file => file.dir === "/some/path");
 }
 ```
 
 Get all files in a directory recursively down to the last level of directories
 ```javascript
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function getFiles() {
-  return myFs.docs.filter(
+  return myFS.docs.filter(
     file => file.dir === "/some/path" || file.dir.startsWith("/some/path/")
   );
 }
@@ -60,10 +60,10 @@ async function getFiles() {
 
 Update a file
 ```javascript
-import myFs from "./my-fs.js";
+import myFS from "./my-fs.js";
 
 async function updateFile() {
-  myFs.docs = myFs.docs.map(
+  myFS.docs = myFS.docs.map(
     file =>
       file.dir === "documents" && file.filename === "report.txt"
         ? { ...file, contents: "hello, universe" }
@@ -74,10 +74,10 @@ async function updateFile() {
 
 Delete a file
 ```javascript
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function deleteFile() {
-  myFs.docs = myFs.docs.filter(
+  myFS.docs = myFS.docs.filter(
     file => !(file.dir === "documents" && file.filename === "report.txt")
   );
 }
@@ -85,19 +85,19 @@ async function deleteFile() {
 
 Delete a directory
 ```javascript
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function deleteDir() {
-  myFs.docs = myFs.docs.filter(file => !(file.dir === "documents"));
+  myFS.docs = myFS.docs.filter(file => !(file.dir === "documents"));
 }
 ```
 
 Move a file
 ```javascript
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function moveFile() {
-  myFs.docs = myFs.docs.map(
+  myFS.docs = myFS.docs.map(
     file =>
       file.dir === "documents" && file.filename === "report.txt"
         ? { ...file, dir: "reports", filename: "report.txt" }
@@ -109,10 +109,10 @@ async function moveFile() {
 
 Move a directory
 ```javascript
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function moveFile() {
-  myFs.docs = myFs.docs.map(
+  myFS.docs = myFS.docs.map(
     file => (file.dir === "documents" ? { ...file, dir: "reports" } : file)
   );
 }

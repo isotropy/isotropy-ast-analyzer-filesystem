@@ -9,6 +9,6 @@ module.exports = {
     value: "reports"
   },
   location: "home/office/docs",
-  identifier: "myFs",
+  identifier: "myFS",
   collection: "docs"
 };

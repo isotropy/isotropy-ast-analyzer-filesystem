@@ -1,7 +1,7 @@
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function readFile() {
-  return myFs.docs.find(
+  return myFS.docs.find(
     file => file.dir === "/some/path" && file.filename === "report.txt"
   );
 }

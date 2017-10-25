@@ -1,5 +1,5 @@
-import myFs from "../my-fs";
+import myFS from "../my-fs";
 
 async function writeError() {
-  myFs.docs = myFs.docs.pop();
+  myFS.docs = myFS.docs.pop();
 }

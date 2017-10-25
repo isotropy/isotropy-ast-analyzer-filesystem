@@ -13,6 +13,6 @@ module.exports = {
     "value": "hello, universe"
   },
   location: "home/office/docs",
-  identifier: "myFs",
+  identifier: "myFS",
   collection: "docs"
 }

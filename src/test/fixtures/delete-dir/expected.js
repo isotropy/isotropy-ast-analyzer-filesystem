@@ -5,6 +5,6 @@ module.exports = {
     value: "documents"
   },
   location: "home/office/docs",
-  identifier: "myFs",
+  identifier: "myFS",
   collection: "docs"
 };

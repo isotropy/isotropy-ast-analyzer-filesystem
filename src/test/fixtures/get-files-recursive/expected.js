@@ -6,6 +6,6 @@ module.exports = {
   },
   recurse: true,
   location: "home/office/docs",
-  identifier: "myFs",
+  identifier: "myFS",
   collection: "docs"
 };
