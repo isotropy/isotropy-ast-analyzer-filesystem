@@ -8,8 +8,52 @@ import {
   Match,
   Skip
 } from "chimpanzee";
-import { source, composite, clean, permute, permuteWith } from "isotropy-analyzer-utils";
+import { source, composite, clean, permuteWith } from "isotropy-analyzer-utils";
 import R from "ramda";
+
+function matchLogical(obj, params = {}) {
+  return any(
+    permuteWith(
+      [
+        [x => x.left, (x, v) => ({ ...x, left: v })],
+        [x => x.right, (x, v) => ({ ...x, right: v })]
+      ],
+      { ...obj, type: "LogicalExpression" }
+    ),
+    {
+      build: obj => context => result =>
+        result instanceof Match
+          ? { ...result.value.left, ...result.value.right }
+          : result,
+      ...params
+    }
+  );
+}
+
+function matchBinary(key, obj, operator, params = {}) {
+  return any(
+    permuteWith(
+      [
+        [x => x.left, (x, v) => ({ ...x, left: v })],
+        [x => x.right, (x, v) => ({ ...x, right: v })]
+      ],
+      {
+        type: "BinaryExpression",
+        left: obj,
+        right: capture(`__${key}`),
+        operator
+      }
+    ),
+    {
+      build: obj => context => result => {
+        return result instanceof Match
+          ? { [key]: result.value[`__${key}`] }
+          : result;
+      },
+      ...params
+    }
+  );
+}
 
 export default function(state, analysisState) {
   return composite(
@@ -30,53 +74,42 @@ export default function(state, analysisState) {
         [
           {
             type: "ArrowFunctionExpression",
-            params: [capture("param")],
-            body: any(
-              permuteWith(
-                [
-                  [x => x.left, (x, v) => ({ ...x, left: v })],
-                  [x => x.right, (x, v) => ({ ...x, right: v })]
-                ],
+            body: matchLogical({
+              left: matchBinary(
+                "filename",
                 {
-                  type: "LogicalExpression",
-                  left: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("leftIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: "filename"
-                      }
-                    },
-                    operator: "===",
-                    right: capture("filename")
-                  },
-                  operator: "&&",
-                  right: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("rightIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: capture("dir")
-                      }
-                    },
-                    operator: "===",
-                    right: capture("dir")
+                  type: "MemberExpression",
+                  object: capture("leftIdentifier"),
+                  property: {
+                    type: "Identifier",
+                    name: "filename"
                   }
-                }
+                },
+                "==="
+              ),
+              operator: "&&",
+              right: matchBinary(
+                "dir",
+                {
+                  type: "MemberExpression",
+                  object: capture("leftIdentifier"),
+                  property: {
+                    type: "Identifier",
+                    name: "dir"
+                  }
+                },
+                "==="
               )
-            )
+            })
           }
         ],
         { key: "args" }
       )
     },
     {
-      build: obj => context => result =>
-        result instanceof Match
+      build: obj => context => result => {
+        debugger;
+        return result instanceof Match
           ? {
               filename: result.value.args[0].body.filename,
               dir: result.value.args[0].body.dir,
@@ -84,7 +117,8 @@ export default function(state, analysisState) {
               path: result.value.fs.path,
               operation: "get-file"
             }
-          : result
+          : result;
+      }
     }
   );
 }

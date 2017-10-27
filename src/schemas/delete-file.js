@@ -8,7 +8,7 @@ import {
   Match,
   Skip
 } from "chimpanzee";
-import { source, composite, clean } from "isotropy-analyzer-utils";
+import { source, composite, clean, permuteWith } from "isotropy-analyzer-utils";
 import R from "ramda";
 import { deleteFile } from "../fs-statements";
 
@@ -38,51 +38,47 @@ export default function(state, analysisState) {
           [
             {
               type: "ArrowFunctionExpression",
-              params: [
-                {
-                  type: "Identifier",
-                  name: capture("fsIdentifier1")
-                }
-              ],
               body: {
                 type: "UnaryExpression",
                 operator: "!",
-                argument: {
-                  type: "LogicalExpression",
-                  left: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: {
-                        type: "Identifier",
-                        name: capture("fsIdentifier2")
+                argument: any(
+                  permuteWith(
+                    [
+                      [x => x.left, (x, v) => ({ ...x, left: v })],
+                      [x => x.right, (x, v) => ({ ...x, right: v })]
+                    ],
+                    {
+                      type: "LogicalExpression",
+                      left: {
+                        type: "BinaryExpression",
+                        left: {
+                          type: "MemberExpression",
+                          object: capture("leftIdentifier"),
+                          property: {
+                            type: "Identifier",
+                            name: "filename"
+                          }
+                        },
+                        operator: "===",
+                        right: capture("filename")
                       },
-                      property: {
-                        type: "Identifier",
-                        name: capture("key1")
+                      operator: "&&",
+                      right: {
+                        type: "BinaryExpression",
+                        left: {
+                          type: "MemberExpression",
+                          object: capture("rightIdentifier"),
+                          property: {
+                            type: "Identifier",
+                            name: capture("dir")
+                          }
+                        },
+                        operator: "===",
+                        right: capture("dir")
                       }
-                    },
-                    operator: "===",
-                    right: capture("val1")
-                  },
-                  operator: "&&",
-                  right: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: {
-                        type: "Identifier",
-                        name: capture("fsIdentifier3")
-                      },
-                      property: {
-                        type: "Identifier",
-                        name: capture("key2")
-                      }
-                    },
-                    operator: "===",
-                    right: capture("val2")
-                  }
-                }
+                    }
+                  )
+                )
               }
             }
           ],
@@ -91,43 +87,16 @@ export default function(state, analysisState) {
       }
     },
     {
-      build: obj => context => result => {
-        return result instanceof Match
-          ? (() => {
-              const props = result.value.args[0];
-              const fs = result.value.left;
-              let dir, filename;
-              if (props.key1 === "dir") {
-                dir = clean(props.val1);
-                filename = clean(props.val2);
-              }
-              if (props.key1 === "filename") {
-                filename = clean(props.val1);
-                dir = clean(props.val2);
-              }
-              return R.equals(result.value.left, result.value.right)
-                ? props.params[0].fsIdentifier1 === props.fsIdentifier2 &&
-                    props.fsIdentifier2 === props.fsIdentifier3 &&
-                    dir &&
-                    filename
-                  ? deleteFile(
-                      {
-                        dir,
-                        filename
-                      },
-                      {
-                        module: fs.module,
-                        identifier: fs.identifier,
-                        collection: fs.collection
-                      }
-                    )
-                  : new Skip(`File deletion requires "dir" and "filename"`)
-                : new Skip(
-                    `The result of the filter() must be assigned to the same fs module.`
-                  );
-            })()
-          : result;
-      }
+      build: obj => context => result =>
+        result instanceof Match
+          ? {
+              filename: result.value.args[0].argument.filename,
+              dir: result.value.args[0].argument.dir,
+              identifier: result.value.right.identifier,
+              path: result.value.right.path,
+              operation: "delete-file"
+            }
+          : result
     }
   );
 }

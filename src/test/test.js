@@ -66,7 +66,7 @@ describe("isotropy-ast-analyzer-filesystem", () => {
   }
 
   const tests = [
-    ["create-file", "create-file"],
+    // ["create-file", "create-file"],
     // ["delete-file", "delete-file"],
     // ["delete-dir", "delete-dir"],
     // ["get-files", "get-files"],
@@ -74,6 +74,7 @@ describe("isotropy-ast-analyzer-filesystem", () => {
     // ["move-file", "move-file"],
     // ["move-dir", "move-dir"],
     ["read-file", "read-file"],
+    // ["read-file-ulta", "read-file-ulta"],
     // ["update-file", "update-file"],
   ];
 
