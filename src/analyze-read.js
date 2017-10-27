@@ -7,9 +7,9 @@ export default function(analysisState) {
       return makeAnalyzer(
         [
           schemas.readFile,
-          schemas.getFiles,
-          schemas.getFilesRecursively,
-          schemas.readError
+          // schemas.getFiles,
+          // schemas.getFilesRecursively,
+          // schemas.readError
         ],
         path,
         state,

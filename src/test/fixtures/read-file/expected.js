@@ -1,14 +1,7 @@
 module.exports = {
-  operation: "read-file",
-  dir: {
-    type: "StringLiteral",
-    value: "/some/path"
-  },
-  filename: {
-    type: "StringLiteral",
-    value: "report.txt"
-  },
-  location: "home/office/docs",
+  operation: "get-file",
+  filename: { type: "StringLiteral", value: "report.txt" },
+  dir: { type: "StringLiteral", value: "/some/path" },
   identifier: "myFS",
-  collection: "docs"
+  path: "home/office/docs"
 };

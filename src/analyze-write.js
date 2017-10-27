@@ -7,12 +7,12 @@ export default function(analysisState) {
       return makeAnalyzer(
         [
           schemas.createFile,
-          schemas.updateFile,
-          schemas.deleteFile,
-          schemas.deleteDir,
-          schemas.moveFile,
-          schemas.moveDir,
-          schemas.writeError
+          // schemas.updateFile,
+          // schemas.deleteFile,
+          // schemas.deleteDir,
+          // schemas.moveFile,
+          // schemas.moveDir,
+          // schemas.writeError
         ],
         path,
         state,
