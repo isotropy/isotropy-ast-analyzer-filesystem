@@ -8,7 +8,7 @@ import {
   Match,
   Skip
 } from "chimpanzee";
-import { source, composite, clean } from "isotropy-analyzer-utils";
+import { source, composite, clean, permute } from "isotropy-analyzer-utils";
 import R from "ramda";
 
 export default function(state, analysisState) {
@@ -31,69 +31,75 @@ export default function(state, analysisState) {
           {
             type: "ArrowFunctionExpression",
             params: [capture("param")],
-            body:
-              any[
-                ({
-                  type: "LogicalExpression",
+            body: any(
+              permute([
+                [ x=> x.left, (x, v) => ({ ...x, left: v }) ],
+                [ x=> x.right, (x, v) => ({ ...x, right: v }) ]
+              ],
+              {
+                type: "LogicalExpression",
+                left: {
+                  type: "BinaryExpression",
                   left: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("leftIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: "filename"
-                      }
-                    },
-                    operator: "===",
-                    right: capture("filename")
+                    type: "MemberExpression",
+                    object: capture("leftIdentifier"),
+                    property: {
+                      type: "Identifier",
+                      name: "filename"
+                    }
                   },
-                  operator: "&&",
-                  right: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("rightIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: capture("dir")
-                      }
-                    },
-                    operator: "===",
-                    right: capture("dir")
-                  }
+                  operator: "===",
+                  right: capture("filename")
+                },
+                operator: "&&",
+                right: {
+                  type: "BinaryExpression",
+                  left: {
+                    type: "MemberExpression",
+                    object: capture("rightIdentifier"),
+                    property: {
+                      type: "Identifier",
+                      name: capture("dir")
+                    }
+                  },
+                  operator: "===",
+                  right: capture("dir")
+                }
+              })
+              permute([
+                {
+                  type: "BinaryExpression",
+                  left: {
+                    type: "MemberExpression",
+                    object: capture("leftIdentifier"),
+                    property: {
+                      type: "Identifier",
+                      name: "filename"
+                    }
+                  },
+                  operator: "===",
+                  right: capture("filename")
                 },
                 {
-                  type: "LogicalExpression",
+                  type: "BinaryExpression",
                   left: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("leftIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: "dir"
-                      }
-                    },
-                    operator: "===",
-                    right: capture("dir")
+                    type: "MemberExpression",
+                    object: capture("rightIdentifier"),
+                    property: {
+                      type: "Identifier",
+                      name: capture("dir")
+                    }
                   },
-                  operator: "&&",
-                  right: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("rightIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: capture("filename")
-                      }
-                    },
-                    operator: "===",
-                    right: capture("filename")
-                  }
-                })
-              ]
+                  operator: "===",
+                  right: capture("dir")
+                }
+              ]).map(([left, right]) => ({
+                type: "LogicalExpression",
+                left,
+                operator: "&&",
+                right
+              }))
+            )
           }
         ],
         { key: "args" }
