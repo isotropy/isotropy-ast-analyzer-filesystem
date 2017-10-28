@@ -81,17 +81,20 @@ export default function(state, analysisState) {
         },
         {
           build: obj => context => result => {
-            const dir = result.value.arguments[0].body.dirExpression.dir;
-            const dirStartsWith = result.value.arguments[0].body.arguments[0];
             return result instanceof Match
-              ? {
-                  dir,
-                  dirStartsWith,
-                  identifier: _object.identifier,
-                  path: _object.path,
-                  operation: "get-files",
-                  recurse: true
-                }
+              ? (() => {
+                  const dir = result.value.arguments[0].body.dirExpression.dir;
+                  const dirStartsWith =
+                    result.value.arguments[0].body.arguments[0];
+                  return {
+                    dir,
+                    dirStartsWith,
+                    identifier: _object.identifier,
+                    path: _object.path,
+                    operation: "get-files",
+                    recurse: true
+                  };
+                })()
               : result;
           }
         }

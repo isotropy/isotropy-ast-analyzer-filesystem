@@ -742,9 +742,9 @@ isotropy-analyzer-errors@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/isotropy-analyzer-errors/-/isotropy-analyzer-errors-0.0.6.tgz#ab1f7a70ad3afd13176958dd8feae412a2cce998"
 
-isotropy-analyzer-utils@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/isotropy-analyzer-utils/-/isotropy-analyzer-utils-0.0.10.tgz#5d992bb0e0c265ca61ccbc239cec7fa7a7204ef3"
+isotropy-analyzer-utils@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/isotropy-analyzer-utils/-/isotropy-analyzer-utils-0.0.12.tgz#6ae3b57d3a07088a46c98d92a5bce0cc49b47f53"
 
 isotropy-plugin-dev-utils@^0.0.6:
   version "0.0.6"
