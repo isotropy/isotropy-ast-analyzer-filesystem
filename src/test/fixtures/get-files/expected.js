@@ -1,11 +1,6 @@
 module.exports = {
-  type: "getFiles",
-  dir: {
-    type: "StringLiteral",
-    value: "/some/path"
-  },
-  recurse: false,
-  location: "home/office/docs",
+  operation: "get-files",
+  dir: { type: "StringLiteral", value: "/some/path" },
   identifier: "myFS",
-  collection: "docs"
+  path: "home/office/docs"
 };

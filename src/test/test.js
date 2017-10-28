@@ -67,13 +67,14 @@ describe("isotropy-ast-analyzer-filesystem", () => {
 
   const tests = [
     ["create-file", "create-file"],
-    // ["delete-file", "delete-file"],
-    // ["delete-dir", "delete-dir"],
-    // ["get-files", "get-files"],
+    ["delete-dir", "delete-dir"],
+    ["delete-file", "delete-file"],
+    ["get-files", "get-files"],
     // ["getfiles-recursive", "get-files-recursive"],
     // ["move-file", "move-file"],
     // ["move-dir", "move-dir"],
     ["read-file", "read-file"],
+    ["read-file-ulta", "read-file-ulta"],
     // ["update-file", "update-file"],
   ];
 

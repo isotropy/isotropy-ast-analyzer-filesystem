@@ -13,39 +13,38 @@ import { source, composite } from "isotropy-analyzer-utils";
 import R from "ramda";
 
 export default function(state, analysisState) {
-  return composite(
-    {
-      type: "AssignmentExpression",
-      operator: "=",
-      left: wrap(collection(state, analysisState), {
-        key: "left",
-        selector: "path"
-      }),
-      right: {
-        type: "CallExpression",
-        callee: {
-          type: "MemberExpression",
-          object: wrap(collection(state, analysisState), {
-            key: "right",
-            selector: "path"
-          }),
-          property: {
-            type: "Identifier",
-            name: "concat"
-          }
-        },
-        arguments: [capture()]
+  return composite({
+    type: "AssignmentExpression",
+    operator: "=",
+    left: source([collection])(state, analysisState),
+    right: {
+      type: "CallExpression",
+      callee: {
+        type: "MemberExpression",
+        object: source([collection])(state, analysisState),
+        property: {
+          type: "Identifier",
+          name: "concat"
+        }
       }
-    },
-    {
-      build: obj => context => result =>
-        result instanceof Match
-          ? {
-              ...result.value.right,
-              operation: "create-file",
-              files: result.value.arguments[0]
-            }
-          : result
     }
+  }).then(({ object: _object }) =>
+    composite(
+      {
+        right: {
+          arguments: [capture()]
+        }
+      },
+      {
+        build: obj => context => result =>
+          result instanceof Match
+            ? {
+                ..._object,
+                operation: "create-file",
+                files: result.value.arguments[0]
+              }
+            : result
+      }
+    )
   );
 }

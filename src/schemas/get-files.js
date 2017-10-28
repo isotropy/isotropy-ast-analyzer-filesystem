@@ -1,82 +1,71 @@
 import { collection } from "./";
+import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  capture,
-  any,
-  array,
-  map as mapResult,
-  wrap,
-  Match,
-  Skip
-} from "chimpanzee";
-import { source, composite, clean } from "isotropy-analyzer-utils";
+  source,
+  composite,
+  clean,
+  permuteProps
+} from "isotropy-analyzer-utils";
 import R from "ramda";
-import { getFiles } from "../fs-statements";
 
 export default function(state, analysisState) {
-  return composite(
-    {
-      type: "CallExpression",
-      callee: {
-        type: "MemberExpression",
-        object: wrap(collection(state, analysisState), {
-          key: "fs",
-          selector: "path"
-        }),
-        property: {
-          type: "Identifier",
-          name: "filter"
-        }
-      },
-      arguments: array(
-        [
-          {
-            type: "ArrowFunctionExpression",
-            params: [
-              {
-                type: "Identifier",
-                name: capture("fsIdentifier1")
-              }
-            ],
-            body: {
-              type: "BinaryExpression",
-              left: {
-                type: "MemberExpression",
-                object: {
-                  type: "Identifier",
-                  name: capture("fsIdentifier2")
-                },
-                property: {
-                  type: "Identifier",
-                  name: "dir"
-                }
-              },
-              operator: "===",
-              right: capture("val1")
-            }
-          }
-        ],
-        { key: "args" }
-      )
-    },
-    {
-      build: () => () => result => {
-        return result instanceof Match
-          ? (() => {
-              const fs = result.value.fs;
-              return result.value.args[0].params[0].fsIdentifier1 ===
-                result.value.args[0].fsIdentifier2
-                ? getFiles(
-                    { dir: result.value.args[0].val1, recurse: false },
-                    {
-                      identifier: fs.identifier,
-                      module: fs.module,
-                      collection: fs.collection
-                    }
-                  )
-                : new Skip(`File system access variables do not match`);
-            })()
-          : result;
+  return composite({
+    type: "CallExpression",
+    callee: {
+      type: "MemberExpression",
+      object: source([collection])(state, analysisState),
+      property: {
+        type: "Identifier",
+        name: "filter"
       }
     }
+  }).then(({ object: _object }) =>
+    composite({
+      arguments: array([
+        {
+          type: "ArrowFunctionExpression",
+          params: capture()
+        }
+      ])
+    }).then(({ arguments: [{ params }] }) =>
+      composite(
+        {
+          arguments: array([
+            {
+              body: any(
+                permuteProps(["left", "right"], {
+                  type: "BinaryExpression",
+                  left: {
+                    type: "MemberExpression",
+                    object: {
+                      type: "Identifier",
+                      name: params[0].name
+                    },
+                    property: {
+                      type: "Identifier",
+                      name: capture("dir")
+                    }
+                  },
+                  operator: "===",
+                  right: capture("dir")
+                }),
+                { key: "dirExpression" }
+              )
+            }
+          ])
+        },
+        {
+          build: obj => context => result =>
+            result instanceof Match
+              ? {
+                  dir: result.value.arguments[0].dirExpression.dir,
+                  identifier: _object.identifier,
+                  path: _object.path,
+                  operation: "get-files"
+                }
+              : result
+        }
+      )
+    )
   );
 }

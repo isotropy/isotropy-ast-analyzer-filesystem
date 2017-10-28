@@ -1,14 +1,7 @@
 module.exports = {
-  type: "deleteFile",
-  dir: {
-    type: "StringLiteral",
-    value: "documents"
-  },
-  filename: {
-    type: "StringLiteral",
-    value: "report.txt"
-  },
-  location: "home/office/docs",
+  operation: "delete-file",
+  filename: { type: "StringLiteral", value: "report.txt" },
+  dir: { type: "StringLiteral", value: "/some/path" },
   identifier: "myFS",
-  collection: "docs"
+  path: "home/office/docs"
 };

@@ -1,97 +1,84 @@
 import { collection } from "./";
+import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  capture,
-  any,
-  array,
-  map as mapResult,
-  wrap,
-  Match,
-  Skip
-} from "chimpanzee";
-import { source, composite, clean } from "isotropy-analyzer-utils";
+  source,
+  composite,
+  clean,
+  permuteProps
+} from "isotropy-analyzer-utils";
 import R from "ramda";
-import { deleteDir } from "../fs-statements";
 
 export default function(state, analysisState) {
-  return composite(
-    {
-      type: "AssignmentExpression",
-      operator: "=",
-      left: wrap(collection(state, analysisState), {
-        key: "left",
-        selector: "path"
-      }),
-      right: {
-        type: "CallExpression",
-        callee: {
-          type: "MemberExpression",
-          object: wrap(collection(state, analysisState), {
-            key: "right",
-            selector: "path"
-          }),
-          property: {
-            type: "Identifier",
-            name: "filter"
-          }
-        },
-        arguments: array(
-          [
-            {
-              type: "ArrowFunctionExpression",
-              params: [
-                {
-                  type: "Identifier",
-                  name: capture("fsIdentifier1")
-                }
-              ],
-              body: {
-                type: "UnaryExpression",
-                operator: "!",
-                argument: {
-                  type: "BinaryExpression",
-                  left: {
-                    type: "MemberExpression",
-                    object: {
-                      type: "Identifier",
-                      name: capture("fsIdentifier2")
-                    },
-                    property: {
-                      type: "Identifier",
-                      name: "dir"
-                    }
-                  },
-                  operator: "===",
-                  right: capture("dir")
-                }
-              }
-            }
-          ],
-          { key: "args" }
-        )
-      }
-    },
-    {
-      build: obj => context => result => {
-        return result instanceof Match
-          ? R.equals(result.value.left, result.value.right)
-            ? result.value.args[0].params[0].fsIdentifier1 ===
-                result.value.args[0].fsIdentifier2
-              ? deleteDir(
-                  {
-                    dir: clean(result.value.args[0].dir)
-                  },
-                  {
-                    module: result.value.left.module,
-                    identifier: result.value.left.identifier,
-                    collection: result.value.left.collection
-                  }
-                )
-              : new Skip(
-                  `The result of the delete() must be assigned to the same fs module.`
-                )
-            : new Skip(`Incorrect access variable for array operation`)
-          : result;
+  return composite({
+    type: "AssignmentExpression",
+    operator: "=",
+    left: source([collection])(state, analysisState),
+    right: {
+      type: "CallExpression",
+      callee: {
+        type: "MemberExpression",
+        object: source([collection])(state, analysisState),
+        property: {
+          type: "Identifier",
+          name: "filter"
+        }
       }
     }
+  }).then(({ object: _object }) =>
+    composite({
+      right: {
+        arguments: array([
+          {
+            type: "ArrowFunctionExpression",
+            params: capture()
+          }
+        ])
+      }
+    }).then(({ arguments: [{ params }] }) =>
+      composite(
+        {
+          right: {
+            arguments: array([
+              {
+                body: {
+                  type: "UnaryExpression",
+                  operator: "!",
+                  argument: any(
+                    permuteProps(["left", "right"], {
+                      type: "BinaryExpression",
+                      left: {
+                        type: "MemberExpression",
+                        object: {
+                          type: "Identifier",
+                          name: params[0].name
+                        },
+                        property: {
+                          type: "Identifier",
+                          name: capture("dir")
+                        }
+                      },
+                      operator: "===",
+                      right: capture("dir")
+                    }),
+                    { key: "dirExpression" }
+                  )
+                }
+              }
+            ])
+          }
+        },
+        {
+          build: obj => context => result =>
+            result instanceof Match
+              ? {
+                  dir: result.value.arguments[0].dirExpression.dir,
+                  identifier: _object.identifier,
+                  path: _object.path,
+                  operation: "delete-dir"
+                }
+              : result
+        }
+      )
+    )
   );
 }

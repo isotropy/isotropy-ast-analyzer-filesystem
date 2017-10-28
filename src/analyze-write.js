@@ -8,8 +8,8 @@ export default function(analysisState) {
         [
           schemas.createFile,
           // schemas.updateFile,
-          // schemas.deleteFile,
-          // schemas.deleteDir,
+          schemas.deleteFile,
+          schemas.deleteDir,
           // schemas.moveFile,
           // schemas.moveDir,
           // schemas.writeError

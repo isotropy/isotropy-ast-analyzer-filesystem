@@ -1,90 +1,98 @@
 import { collection } from "./";
+import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  capture,
-  any,
-  array,
-  map as mapResult,
-  wrap,
-  Match,
-  Skip
-} from "chimpanzee";
-import { source, composite, clean, permute, permuteWith } from "isotropy-analyzer-utils";
+  source,
+  composite,
+  clean,
+  permuteProps
+} from "isotropy-analyzer-utils";
 import R from "ramda";
 
 export default function(state, analysisState) {
-  return composite(
-    {
-      type: "CallExpression",
-      callee: {
-        type: "MemberExpression",
-        object: wrap(collection(state, analysisState), {
-          key: "fs",
-          selector: "path"
-        }),
-        property: {
-          type: "Identifier",
-          name: "find"
-        }
-      },
-      arguments: array(
-        [
-          {
-            type: "ArrowFunctionExpression",
-            params: [capture("param")],
-            body: any(
-              permuteWith(
-                [
-                  [x => x.left, (x, v) => ({ ...x, left: v })],
-                  [x => x.right, (x, v) => ({ ...x, right: v })]
-                ],
-                {
-                  type: "LogicalExpression",
-                  left: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("leftIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: "filename"
-                      }
-                    },
-                    operator: "===",
-                    right: capture("filename")
-                  },
-                  operator: "&&",
-                  right: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: capture("rightIdentifier"),
-                      property: {
-                        type: "Identifier",
-                        name: capture("dir")
-                      }
-                    },
-                    operator: "===",
-                    right: capture("dir")
-                  }
-                }
-              )
-            )
-          }
-        ],
-        { key: "args" }
-      )
-    },
-    {
-      build: obj => context => result =>
-        result instanceof Match
-          ? {
-              filename: result.value.args[0].body.filename,
-              dir: result.value.args[0].body.dir,
-              identifier: result.value.fs.identifier,
-              path: result.value.fs.path,
-              operation: "get-file"
-            }
-          : result
+  return composite({
+    type: "CallExpression",
+    callee: {
+      type: "MemberExpression",
+      object: source([collection])(state, analysisState),
+      property: {
+        type: "Identifier",
+        name: "find"
+      }
     }
+  }).then(({ object: _object }) =>
+    composite({
+      arguments: array([
+        {
+          type: "ArrowFunctionExpression",
+          params: capture()
+        }
+      ])
+    }).then(({ arguments: [{ params }] }) =>
+      composite(
+        {
+          arguments: array([
+            {
+              body: any(
+                permuteProps(["left", "right"], {
+                  type: "LogicalExpression",
+                  left: any(
+                    permuteProps(["left", "right"], {
+                      type: "BinaryExpression",
+                      left: {
+                        type: "MemberExpression",
+                        object: {
+                          type: "Identifier",
+                          name: params[0].name
+                        },
+                        property: {
+                          type: "Identifier",
+                          name: "filename"
+                        }
+                      },
+                      operator: "===",
+                      right: capture("filename")
+                    }),
+                    { key: "filenameExpression" }
+                  ),
+                  operator: "&&",
+                  right: any(
+                    permuteProps(["left", "right"], {
+                      type: "BinaryExpression",
+                      left: {
+                        type: "MemberExpression",
+                        object: {
+                          type: "Identifier",
+                          name: params[0].name
+                        },
+                        property: {
+                          type: "Identifier",
+                          name: "dir"
+                        }
+                      },
+                      operator: "===",
+                      right: capture("dir")
+                    }),
+                    { key: "dirExpression" }
+                  )
+                })
+              )
+            }
+          ])
+        },
+        {
+          build: obj => context => result =>
+            result instanceof Match
+              ? {
+                  filename:
+                    result.value.arguments[0].body.filenameExpression.filename,
+                  dir: result.value.arguments[0].body.dirExpression.dir,
+                  identifier: _object.identifier,
+                  path: _object.path,
+                  operation: "read-file"
+                }
+              : result
+        }
+      )
+    )
   );
 }
