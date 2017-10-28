@@ -8,7 +8,7 @@ export default function(analysisState) {
         [
           schemas.readFile,
           schemas.getFiles,
-          // schemas.getFilesRecursively,
+          schemas.getFilesRecursively,
           // schemas.readError
         ],
         path,

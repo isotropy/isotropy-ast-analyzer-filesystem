@@ -70,7 +70,7 @@ describe("isotropy-ast-analyzer-filesystem", () => {
     ["delete-dir", "delete-dir"],
     ["delete-file", "delete-file"],
     ["get-files", "get-files"],
-    // ["getfiles-recursive", "get-files-recursive"],
+    ["getfiles-recursive", "get-files-recursive"],
     // ["move-file", "move-file"],
     // ["move-dir", "move-dir"],
     ["read-file", "read-file"],

@@ -1,126 +1,101 @@
 import { collection } from "./";
+import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  capture,
-  any,
-  array,
-  map as mapResult,
-  wrap,
-  Match,
-  Skip
-} from "chimpanzee";
-import { source, composite, clean } from "isotropy-analyzer-utils";
+  source,
+  composite,
+  clean,
+  permuteProps
+} from "isotropy-analyzer-utils";
 import R from "ramda";
-import { getFiles } from "../fs-statements";
 
 export default function(state, analysisState) {
-  const dir = {
-    type: "BinaryExpression",
-    left: {
-      type: "MemberExpression",
-      object: {
-        type: "Identifier",
-        name: capture("fsIdentifier2")
-      },
-      property: {
-        type: "Identifier",
-        name: "dir"
-      }
-    },
-    operator: "===",
-    right: capture("dir1")
-  };
-
-  const dirStartsWith = {
+  return composite({
     type: "CallExpression",
     callee: {
       type: "MemberExpression",
-      object: {
-        type: "MemberExpression",
-        object: {
-          type: "Identifier",
-          name: capture("fsIdentifier3")
-        },
-        property: {
-          type: "Identifier",
-          name: "dir"
-        }
-      },
+      object: source([collection])(state, analysisState),
       property: {
         type: "Identifier",
-        name: "startsWith"
-      }
-    },
-    arguments: [capture("dir2")]
-  };
-
-  return composite(
-    {
-      type: "CallExpression",
-      callee: {
-        type: "MemberExpression",
-        object: wrap(collection(state, analysisState), {
-          key: "fs",
-          selector: "path"
-        }),
-        property: {
-          type: "Identifier",
-          name: "filter"
-        }
-      },
-      arguments: array(
-        [
-          {
-            type: "ArrowFunctionExpression",
-            params: [
-              {
-                type: "Identifier",
-                name: capture("fsIdentifier1")
-              }
-            ],
-            body: any([
-              {
-                type: "LogicalExpression",
-                left: dir,
-                operator: "||",
-                right: dirStartsWith
-              },
-              {
-                type: "LogicalExpression",
-                left: dirStartsWith,
-                operator: "||",
-                right: dir
-              }
-            ])
-          }
-        ],
-        { key: "args" }
-      )
-    },
-    {
-      build: () => () => result => {
-        return result instanceof Match
-          ? (() => {
-              const fs = result.value.fs;
-              return result.value.args[0].params[0].fsIdentifier1 &&
-                result.value.args[0].body.fsIdentifier2 ===
-                  result.value.args[0].body.fsIdentifier3
-                ? getFiles(
-                    {
-                      dir: clean(result.value.args[0].body.dir1),
-                      recurse: true
-                    },
-                    {
-                      identifier: fs.identifier,
-                      module: fs.module,
-                      collection: fs.collection
-                    }
-                  )
-                : new Skip(
-                    `The fs access identifier should be the same across all instances.`
-                  );
-            })()
-          : result;
+        name: "filter"
       }
     }
+  }).then(({ object: _object }) =>
+    composite({
+      arguments: array([
+        {
+          type: "ArrowFunctionExpression",
+          params: capture()
+        }
+      ])
+    }).then(({ arguments: [{ params }] }) =>
+      composite(
+        {
+          arguments: array([
+            {
+              body: any(
+                permuteProps(["left", "right"], {
+                  type: "LogicalExpression",
+                  left: any(
+                    permuteProps(["left", "right"], {
+                      type: "BinaryExpression",
+                      left: {
+                        type: "MemberExpression",
+                        object: {
+                          type: "Identifier",
+                          name: params[0].name
+                        },
+                        property: {
+                          type: "Identifier",
+                          name: "dir"
+                        }
+                      },
+                      operator: "===",
+                      right: capture("dir")
+                    }),
+                    { key: "dirExpression" }
+                  ),
+                  operator: "||",
+                  right: {
+                    type: "CallExpression",
+                    callee: {
+                      type: "MemberExpression",
+                      object: {
+                        type: "MemberExpression",
+                        object: {
+                          type: "Identifier",
+                          name: params[0].name
+                        },
+                        property: {
+                          type: "Identifier",
+                          name: "dir"
+                        }
+                      },
+                      property: { type: "Identifier", name: "startsWith" }
+                    },
+                    arguments: [capture("dirStartsWith")]
+                  }
+                })
+              )
+            }
+          ])
+        },
+        {
+          build: obj => context => result => {
+            const dir = result.value.arguments[0].body.dirExpression.dir;
+            const dirStartsWith = result.value.arguments[0].body.arguments[0];
+            return result instanceof Match
+              ? {
+                  dir,
+                  dirStartsWith,
+                  identifier: _object.identifier,
+                  path: _object.path,
+                  operation: "get-files",
+                  recurse: true
+                }
+              : result;
+          }
+        }
+      )
+    )
   );
 }
