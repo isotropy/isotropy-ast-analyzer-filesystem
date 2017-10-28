@@ -8,50 +8,6 @@ import {
 } from "isotropy-analyzer-utils";
 import R from "ramda";
 
-function matchLogical(obj, params = {}) {
-  return any(
-    permuteWith(
-      [
-        [x => x.left, (x, v) => ({ ...x, left: v })],
-        [x => x.right, (x, v) => ({ ...x, right: v })]
-      ],
-      { ...obj, type: "LogicalExpression" }
-    ),
-    {
-      build: obj => context => result =>
-        result instanceof Match
-          ? { ...result.value.left, ...result.value.right }
-          : result,
-      ...params
-    }
-  );
-}
-
-function matchBinary(key, obj, operator, params = {}) {
-  return any(
-    permuteWith(
-      [
-        [x => x.left, (x, v) => ({ ...x, left: v })],
-        [x => x.right, (x, v) => ({ ...x, right: v })]
-      ],
-      {
-        type: "BinaryExpression",
-        left: obj,
-        right: capture(`__${key}`),
-        operator
-      }
-    ),
-    {
-      build: obj => context => result => {
-        return result instanceof Match
-          ? { [key]: result.value[`__${key}`] }
-          : result;
-      },
-      ...params
-    }
-  );
-}
-
 export default function(state, analysisState) {
   return composite({
     type: "CallExpression",
@@ -128,7 +84,8 @@ export default function(state, analysisState) {
             result instanceof Match
               ? {
                   filename:
-                    result.value.arguments[0].body.filenameExpression.filename,
+                    result.value.arguments[0].body.filenameExpression
+                      .filename,
                   dir: result.value.arguments[0].body.dirExpression.dir,
                   identifier: _object.identifier,
                   path: _object.path,
