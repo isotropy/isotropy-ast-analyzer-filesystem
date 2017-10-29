@@ -6,7 +6,7 @@ module.exports = {
   },
   filename: {
     type: "StringLiteral",
-    value: "report.txt"
+    value: "doc.txt"
   },
   newDir: {
     type: "StringLiteral",
@@ -16,6 +16,6 @@ module.exports = {
     type: "StringLiteral",
     value: "report.txt"
   },
-  path: "home/office/docs",
+  path: "home/office/docs/",
   identifier: "myFS"
 };

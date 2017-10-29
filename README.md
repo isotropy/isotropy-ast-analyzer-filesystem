@@ -34,7 +34,7 @@ Read a file
 import myFS from "./my-fs.js";
 
 async function readFile() {
-  return myFS.docs.find(file => file.dir === "/some/path" && file.filename === "report.txt");
+  return myFS.docs.find(file => file.dir === "some/path/" && file.filename === "report.txt");
 }
 ```
 
@@ -43,7 +43,7 @@ Get all files in a directory
 import myFS from "../my-fs";
 
 async function getFiles() {
-  return myFS.docs.filter(file => file.dir === "/some/path");
+  return myFS.docs.filter(file => file.dir === "some/path/");
 }
 ```
 
@@ -53,7 +53,7 @@ import myFS from "../my-fs";
 
 async function getFiles() {
   return myFS.docs.filter(
-    file => file.dir === "/some/path" || file.dir.startsWith("/some/path/")
+    file => file.dir === "some/path/" || file.dir.startsWith("some/path/")
   );
 }
 ```

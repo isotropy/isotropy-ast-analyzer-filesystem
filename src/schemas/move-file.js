@@ -1,12 +1,16 @@
 import { collection } from "./";
-import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  source,
-  composite,
-  clean,
-  permuteProps,
-  permuteIndexes
-} from "isotropy-analyzer-utils";
+  capture,
+  any,
+  array,
+  map,
+  wrap,
+  permuteObject,
+  permuteArray,
+  Match,
+  Skip
+} from "chimpanzee";
+import { source, composite, clean } from "isotropy-analyzer-utils";
 import R from "ramda";
 
 export default function(state, analysisState) {
@@ -44,10 +48,10 @@ export default function(state, analysisState) {
                 body: {
                   type: "ConditionalExpression",
                   test: any(
-                    permuteProps(["left", "right"], {
+                    permuteObject(["left", "right"], {
                       type: "LogicalExpression",
                       left: any(
-                        permuteProps(["left", "right"], {
+                        permuteObject(["left", "right"], {
                           type: "BinaryExpression",
                           left: {
                             type: "MemberExpression",
@@ -67,7 +71,7 @@ export default function(state, analysisState) {
                       ),
                       operator: "&&",
                       right: any(
-                        permuteProps(["left", "right"], {
+                        permuteObject(["left", "right"], {
                           type: "BinaryExpression",
                           left: {
                             type: "MemberExpression",
@@ -90,7 +94,7 @@ export default function(state, analysisState) {
                   consequent: {
                     type: "ObjectExpression",
                     properties: any(
-                      permuteIndexes(
+                      permuteArray(
                         [1, 2],
                         [
                           {
@@ -103,18 +107,12 @@ export default function(state, analysisState) {
                           {
                             type: "ObjectProperty",
                             key: { type: "Identifier", name: "dir" },
-                            value: {
-                              type: "StringLiteral",
-                              value: capture("newDir")
-                            }
+                            value: capture("newDir")
                           },
                           {
                             type: "ObjectProperty",
                             key: { type: "Identifier", name: "filename" },
-                            value: {
-                              type: "StringLiteral",
-                              value: capture("newFilename")
-                            }
+                            value: capture("newFilename")
                           }
                         ]
                       )
@@ -132,9 +130,11 @@ export default function(state, analysisState) {
             return result instanceof Match
               ? {
                   filename:
-                    result.value.arguments[0].argument.filenameExpression
-                      .filename,
-                  dir: result.value.arguments[0].argument.dirExpression.dir,
+                    result.value.arguments[0].test.filenameExpression.filename,
+                  dir: result.value.arguments[0].test.dirExpression.dir,
+                  newFilename:
+                    result.value.arguments[0].properties[1].newFilename,
+                  newDir: result.value.arguments[0].properties[0].newDir,
                   identifier: _object.identifier,
                   path: _object.path,
                   operation: "move-file"

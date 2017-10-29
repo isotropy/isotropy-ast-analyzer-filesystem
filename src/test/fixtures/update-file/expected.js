@@ -9,6 +9,6 @@ module.exports = {
     value: "report.txt"
   },
   contents: "Something new....",
-  path: "home/office/docs",
+  path: "home/office/docs/",
   identifier: "myFS"
 };

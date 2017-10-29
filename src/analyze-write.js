@@ -10,7 +10,7 @@ export default function(analysisState) {
           // schemas.updateFile,
           schemas.deleteFile,
           schemas.deleteDir,
-          // schemas.moveFile,
+          schemas.moveFile,
           // schemas.moveDir,
           // schemas.writeError
         ],

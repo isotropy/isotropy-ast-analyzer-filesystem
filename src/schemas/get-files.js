@@ -1,11 +1,15 @@
 import { collection } from "./";
-import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  source,
-  composite,
-  clean,
-  permuteProps
-} from "isotropy-analyzer-utils";
+  capture,
+  any,
+  array,
+  map,
+  wrap,
+  permuteObject,
+  Match,
+  Skip
+} from "chimpanzee";
+import { source, composite, clean } from "isotropy-analyzer-utils";
 import R from "ramda";
 
 export default function(state, analysisState) {
@@ -33,7 +37,7 @@ export default function(state, analysisState) {
           arguments: array([
             {
               body: any(
-                permuteProps(["left", "right"], {
+                permuteObject(["left", "right"], {
                   type: "BinaryExpression",
                   left: {
                     type: "MemberExpression",

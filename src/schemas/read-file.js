@@ -1,11 +1,15 @@
 import { collection } from "./";
-import { capture, any, array, map, wrap, Match, Skip } from "chimpanzee";
 import {
-  source,
-  composite,
-  clean,
-  permuteProps
-} from "isotropy-analyzer-utils";
+  capture,
+  any,
+  array,
+  map,
+  wrap,
+  permuteObject,
+  Match,
+  Skip
+} from "chimpanzee";
+import { source, composite, clean } from "isotropy-analyzer-utils";
 import R from "ramda";
 
 export default function(state, analysisState) {
@@ -33,10 +37,10 @@ export default function(state, analysisState) {
           arguments: array([
             {
               body: any(
-                permuteProps(["left", "right"], {
+                permuteObject(["left", "right"], {
                   type: "LogicalExpression",
                   left: any(
-                    permuteProps(["left", "right"], {
+                    permuteObject(["left", "right"], {
                       type: "BinaryExpression",
                       left: {
                         type: "MemberExpression",
@@ -56,7 +60,7 @@ export default function(state, analysisState) {
                   ),
                   operator: "&&",
                   right: any(
-                    permuteProps(["left", "right"], {
+                    permuteObject(["left", "right"], {
                       type: "BinaryExpression",
                       left: {
                         type: "MemberExpression",
@@ -84,8 +88,7 @@ export default function(state, analysisState) {
             result instanceof Match
               ? {
                   filename:
-                    result.value.arguments[0].body.filenameExpression
-                      .filename,
+                    result.value.arguments[0].body.filenameExpression.filename,
                   dir: result.value.arguments[0].body.dirExpression.dir,
                   identifier: _object.identifier,
                   path: _object.path,

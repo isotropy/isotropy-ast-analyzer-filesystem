@@ -8,6 +8,6 @@ module.exports = {
     type: "StringLiteral",
     value: "reports"
   },
-  path: "home/office/docs",
+  path: "home/office/docs/",
   identifier: "myFS"
 };
