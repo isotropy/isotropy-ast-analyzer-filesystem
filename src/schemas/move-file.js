@@ -133,8 +133,11 @@ export default function(state, analysisState) {
                     result.value.arguments[0].test.filenameExpression.filename,
                   dir: result.value.arguments[0].test.dirExpression.dir,
                   newFilename:
+                    result.value.arguments[0].properties[0].newFilename ||
                     result.value.arguments[0].properties[1].newFilename,
-                  newDir: result.value.arguments[0].properties[0].newDir,
+                  newDir:
+                    result.value.arguments[0].properties[0].newDir ||
+                    result.value.arguments[0].properties[1].newDir,
                   identifier: _object.identifier,
                   path: _object.path,
                   operation: "move-file"

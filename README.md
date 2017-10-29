@@ -21,7 +21,7 @@ import myFS from "./my-fs.js";
 
 async function createFile() {
   myFS.docs = myFS.docs.concat({
-    dir: "path/to/docs",
+    dir: "path/to/docs/",
     filename: "report.txt",
     contents: "hello, world"
   });
@@ -34,7 +34,7 @@ Read a file
 import myFS from "./my-fs.js";
 
 async function readFile() {
-  return myFS.docs.find(file => file.dir === "path/to/docs" && file.filename === "report.txt");
+  return myFS.docs.find(file => file.dir === "path/to/docs/" && file.filename === "report.txt");
 }
 ```
 
@@ -43,7 +43,7 @@ Get all files in a directory
 import myFS from "../my-fs";
 
 async function getFiles() {
-  return myFS.docs.filter(file => file.dir === "path/to/docs");
+  return myFS.docs.filter(file => file.dir === "path/to/docs/");
 }
 ```
 
@@ -53,7 +53,7 @@ import myFS from "../my-fs";
 
 async function getFiles() {
   return myFS.docs.filter(
-    file => file.dir === "path/to/docs" || file.dir.startsWith("path/to/docs")
+    file => file.dir === "path/to/docs/" || file.dir.startsWith("path/to/docs/")
   );
 }
 ```
@@ -65,7 +65,7 @@ import myFS from "./my-fs.js";
 async function updateFile() {
   myFS.docs = myFS.docs.map(
     file =>
-      file.dir === "path/to/docs" && file.filename === "report.txt"
+      file.dir === "path/to/docs/" && file.filename === "report.txt"
         ? { ...file, contents: "hello, universe" }
         : file
   );
@@ -78,7 +78,7 @@ import myFS from "../my-fs";
 
 async function deleteFile() {
   myFS.docs = myFS.docs.filter(
-    file => !(file.dir === "path/to/docs" && file.filename === "report.txt")
+    file => !(file.dir === "path/to/docs/" && file.filename === "report.txt")
   );
 }
 ```
@@ -88,7 +88,7 @@ Delete a directory
 import myFS from "../my-fs";
 
 async function deleteDir() {
-  myFS.docs = myFS.docs.filter(file => !(file.dir === "path/to/docs"));
+  myFS.docs = myFS.docs.filter(file => !(file.dir === "path/to/docs/"));
 }
 ```
 
@@ -99,8 +99,8 @@ import myFS from "../my-fs";
 async function moveFile() {
   myFS.docs = myFS.docs.map(
     file =>
-      file.dir === "path/to/docs" && file.filename === "report.txt"
-        ? { ...file, dir: "path/to/reports", filename: "report.txt" }
+      file.dir === "path/to/docs/" && file.filename === "report.txt"
+        ? { ...file, dir: "path/to/reports/", filename: "report.txt" }
         : file
   );
 }
@@ -113,7 +113,7 @@ import myFS from "../my-fs";
 
 async function moveFile() {
   myFS.docs = myFS.docs.map(
-    file => (file.dir === "path/to/docs" ? { ...file, dir: "path/to/reports" } : file)
+    file => (file.dir === "path/to/docs/" ? { ...file, dir: "path/to/reports/" } : file)
   );
 }
 

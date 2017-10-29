@@ -9,7 +9,7 @@ module.exports = {
         type: "ObjectProperty",
         method: false,
         key: { type: "Identifier", name: "dir" },
-        value: { type: "StringLiteral", value: "path/to/docs" }
+        value: { type: "StringLiteral", value: "path/to/docs/" }
       },
       {
         type: "ObjectProperty",

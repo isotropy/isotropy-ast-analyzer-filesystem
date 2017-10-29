@@ -2,7 +2,7 @@ module.exports = {
   operation: "update-file",
   dir: {
     type: "StringLiteral",
-    value: "path/to/docs"
+    value: "path/to/docs/"
   },
   filename: {
     type: "StringLiteral",
