@@ -1,6 +1,6 @@
 module.exports = {
   operation: "create-file",
-  path: "home/office/docs/",
+  path: "/home/office/docs/",
   identifier: "myFS",
   files: {
     type: "ObjectExpression",
@@ -9,7 +9,7 @@ module.exports = {
         type: "ObjectProperty",
         method: false,
         key: { type: "Identifier", name: "dir" },
-        value: { type: "StringLiteral", value: "documents" }
+        value: { type: "StringLiteral", value: "path/to/docs" }
       },
       {
         type: "ObjectProperty",

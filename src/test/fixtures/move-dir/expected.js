@@ -2,12 +2,12 @@ module.exports = {
   operation: "move-file",
   dir: {
     type: "StringLiteral",
-    value: "documents"
+    value: "path/to/docs"
   },
   newDir: {
     type: "StringLiteral",
-    value: "reports"
+    value: "path/to/reports"
   },
-  path: "home/office/docs/",
+  path: "/home/office/docs/",
   identifier: "myFS"
 };

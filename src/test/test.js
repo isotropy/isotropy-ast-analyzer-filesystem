@@ -33,7 +33,7 @@ describe("isotropy-ast-analyzer-filesystem", () => {
                       {
                         source: "dist/test/fixtures/my-fs",
                         locations: {
-                          docs: { path: "home/office/docs/" }
+                          docs: { path: "/home/office/docs/" }
                         }
                       }
                     ]
