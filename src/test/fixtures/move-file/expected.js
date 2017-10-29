@@ -1,5 +1,5 @@
 module.exports = {
-  type: "moveFile",
+  operation: "move-file",
   dir: {
     type: "StringLiteral",
     value: "documents"
@@ -8,15 +8,14 @@ module.exports = {
     type: "StringLiteral",
     value: "report.txt"
   },
-  newdir: {
+  newDir: {
     type: "StringLiteral",
     value: "reports"
   },
-  newfilename: {
+  newFilename: {
     type: "StringLiteral",
     value: "report.txt"
   },
-  location: "home/office/docs",
-  identifier: "myFS",
-  collection: "docs"
+  path: "home/office/docs",
+  identifier: "myFS"
 };

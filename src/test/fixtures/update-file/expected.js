@@ -1,18 +1,14 @@
 module.exports = {
-  type: "updateFile",
+  operation: "update-file",
   dir: {
-    "type": "StringLiteral",
-    "value": "documents"
+    type: "StringLiteral",
+    value: "documents"
   },
   filename: {
-    "type": "StringLiteral",
-    "value": "report.txt"
+    type: "StringLiteral",
+    value: "report.txt"
   },
-  contents: {
-    "type": "StringLiteral",
-    "value": "hello, universe"
-  },
-  location: "home/office/docs",
-  identifier: "myFS",
-  collection: "docs"
-}
+  contents: "Something new....",
+  path: "home/office/docs",
+  identifier: "myFS"
+};
