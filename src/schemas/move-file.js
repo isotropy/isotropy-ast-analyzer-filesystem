@@ -125,9 +125,8 @@ export default function(state, analysisState) {
           }
         },
         {
-          build: obj => context => result => {
-            debugger;
-            return result instanceof Match
+          build: obj => context => result =>
+            result instanceof Match
               ? {
                   filename:
                     result.value.arguments[0].test.filenameExpression.filename,
@@ -142,8 +141,7 @@ export default function(state, analysisState) {
                   path: _object.path,
                   operation: "move-file"
                 }
-              : result;
-          }
+              : result
         }
       )
     )

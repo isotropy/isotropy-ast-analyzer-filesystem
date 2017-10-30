@@ -8,7 +8,7 @@ module.exports = {
     type: "StringLiteral",
     value: "report.txt"
   },
-  contents: "Something new....",
+  contents: { type: "StringLiteral", value: "Something, new..." },
   path: "/home/office/docs/",
   identifier: "myFS"
 };

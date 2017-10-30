@@ -8,7 +8,6 @@ export default function(state, analysisState) {
           const importBinding = analysisState.importBindings.find(
             b => b.binding.identifier.name === path.node.name
           );
-
           return importBinding &&
             importBinding.binding.referencePaths.includes(path)
             ? new Match(
@@ -22,5 +21,6 @@ export default function(state, analysisState) {
         })()
       : new Skip(`Root node is not an Identifier`, env);
   };
+  
   return identifier;
 }

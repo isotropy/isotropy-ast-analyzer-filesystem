@@ -3,176 +3,134 @@ import {
   capture,
   any,
   array,
-  map as mapResult,
+  map,
   wrap,
+  permuteObject,
+  permuteArray,
   Match,
   Skip
 } from "chimpanzee";
 import { source, composite, clean } from "isotropy-analyzer-utils";
 import R from "ramda";
-import { updateFile } from "../fs-statements";
 
 export default function(state, analysisState) {
-  const spreadFilesNode = {
-    type: "SpreadProperty",
-    argument: {
-      type: "Identifier",
-      name: capture("fsIdentifier4")
+  return composite({
+    type: "AssignmentExpression",
+    operator: "=",
+    left: source([collection])(state, analysisState),
+    right: {
+      type: "CallExpression",
+      callee: {
+        type: "MemberExpression",
+        object: source([collection])(state, analysisState),
+        property: {
+          type: "Identifier",
+          name: "map"
+        }
+      }
     }
-  };
-
-  const contentNode = {
-    type: "ObjectProperty",
-    key: {
-      type: "Identifier",
-      name: "contents"
-    },
-    value: capture("newContentNode")
-  };
-
-  return composite(
-    {
-      type: "AssignmentExpression",
-      operator: "=",
-      left: wrap(collection(state, analysisState), {
-        key: "left",
-        selector: "path"
-      }),
+  }).then(({ object: _object }) =>
+    composite({
       right: {
-        type: "CallExpression",
-        callee: {
-          type: "MemberExpression",
-          object: wrap(collection(state, analysisState), {
-            key: "right",
-            selector: "path"
-          }),
-          property: {
-            type: "Identifier",
-            name: "map"
+        arguments: array([
+          {
+            type: "ArrowFunctionExpression",
+            params: capture()
           }
-        },
-        arguments: array(
-          [
-            {
-              type: "ArrowFunctionExpression",
-              params: [
-                {
-                  type: "Identifier",
-                  name: capture("fsIdentifier1")
-                }
-              ],
-              body: {
-                type: "ConditionalExpression",
-                test: {
-                  type: "LogicalExpression",
-                  left: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: {
-                        type: "Identifier",
-                        name: capture("fsIdentifier2")
+        ])
+      }
+    }).then(({ arguments: [{ params }] }) =>
+      composite(
+        {
+          right: {
+            arguments: array([
+              {
+                body: {
+                  type: "ConditionalExpression",
+                  test: any(
+                    permuteObject(["left", "right"], {
+                      type: "LogicalExpression",
+                      left: any(
+                        permuteObject(["left", "right"], {
+                          type: "BinaryExpression",
+                          left: {
+                            type: "MemberExpression",
+                            object: {
+                              type: "Identifier",
+                              name: params[0].name
+                            },
+                            property: {
+                              type: "Identifier",
+                              name: "filename"
+                            }
+                          },
+                          operator: "===",
+                          right: capture("filename")
+                        }),
+                        { key: "filenameExpression" }
+                      ),
+                      operator: "&&",
+                      right: any(
+                        permuteObject(["left", "right"], {
+                          type: "BinaryExpression",
+                          left: {
+                            type: "MemberExpression",
+                            object: {
+                              type: "Identifier",
+                              name: params[0].name
+                            },
+                            property: {
+                              type: "Identifier",
+                              name: "dir"
+                            }
+                          },
+                          operator: "===",
+                          right: capture("dir")
+                        }),
+                        { key: "dirExpression" }
+                      )
+                    })
+                  ),
+                  consequent: {
+                    type: "ObjectExpression",
+                    properties: [
+                      {
+                        type: "SpreadProperty",
+                        argument: {
+                          type: "Identifier",
+                          name: params[0].name
+                        }
                       },
-                      property: {
-                        type: "Identifier",
-                        name: capture("key1")
+                      {
+                        type: "ObjectProperty",
+                        key: { type: "Identifier", name: "contents" },
+                        value: capture("contents")
                       }
-                    },
-                    operator: "===",
-                    right: capture("valueNode1")
+                    ]
                   },
-                  operator: "&&",
-                  right: {
-                    type: "BinaryExpression",
-                    left: {
-                      type: "MemberExpression",
-                      object: {
-                        type: "Identifier",
-                        name: capture("fsIdentifier3")
-                      },
-                      property: {
-                        type: "Identifier",
-                        name: capture("key2")
-                      }
-                    },
-                    operator: "===",
-                    right: capture("valueNode2")
-                  }
-                },
-                consequent: {
-                  type: "ObjectExpression",
-                  properties: any([
-                    [spreadFilesNode, contentNode],
-                    [contentNode, spreadFilesNode]
-                  ])
-                },
-                alternate: {
-                  type: "Identifier",
-                  name: capture("fsIdentifier5")
+                  alternate: { type: "Identifier", name: params[0].name }
                 }
               }
-            }
-          ],
-          { key: "args" }
-        )
-      }
-    },
-    {
-      build: obj => context => result => {
-        return result instanceof Match
-          ? (() => {
-              const fsIdentifierArray = [
-                result.value.args[0].params[0].fsIdentifier1,
-                result.value.args[0].fsIdentifier2,
-                result.value.args[0].fsIdentifier3,
-                result.value.args[0].properties[0].fsIdentifier4,
-                result.value.args[0].fsIdentifier5
-              ];
-
-              const keyValueMap = {
-                [result.value.args[0].key1]: clean(
-                  result.value.args[0].valueNode1
-                ),
-                [result.value.args[0].key2]: clean(
-                  result.value.args[0].valueNode2
-                )
-              };
-
-              const { dir, filename } = keyValueMap;
-
-              const contents = clean(
-                result.value.args[0].properties[1].newContentNode
-              );
-
-              const fs = result.value.left;
-
-              return R.equals(result.value.left, result.value.right)
-                ? new Set(fsIdentifierArray).size === 1
-                  ? dir && filename && contentNode
-                    ? updateFile(
-                        {
-                          dir: dir,
-                          filename: filename,
-                          contents
-                        },
-                        {
-                          module: fs.module,
-                          identifier: fs.identifier,
-                          collection: fs.collection
-                        }
-                      )
-                    : new Skip(
-                        `The fields "dir", "filename" and "contents" are required for updating.`
-                      )
-                  : new Skip(
-                      `Make sure you are using the same access variable.`
-                    )
-                : new Skip(
-                    `The result of the filter() must be assigned to the same fs module.`
-                  );
-            })()
-          : result;
-      }
-    }
+            ])
+          }
+        },
+        {
+          build: obj => context => result =>
+            (() => {
+              debugger;
+            })() || result instanceof Match
+              ? {
+                  filename:
+                    result.value.arguments[0].test.filenameExpression.filename,
+                  dir: result.value.arguments[0].test.dirExpression.dir,
+                  contents: result.value.arguments[0].properties[0].contents,
+                  identifier: _object.identifier,
+                  path: _object.path,
+                  operation: "update-file"
+                }
+              : result
+        }
+      )
+    )
   );
 }

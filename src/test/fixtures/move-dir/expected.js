@@ -6,7 +6,7 @@ module.exports = {
   },
   newDir: {
     type: "StringLiteral",
-    value: "path/to/reports/"
+    value: "path/to/new-docs/"
   },
   path: "/home/office/docs/",
   identifier: "myFS"

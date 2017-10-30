@@ -1,5 +1,6 @@
 import * as schemas from "./schemas";
 import makeAnalyzer from "./make-analyzer";
+import { schemas as errorSchemas } from "isotropy-analyzer-errors";
 
 export default function(analysisState) {
   return {
@@ -7,12 +8,12 @@ export default function(analysisState) {
       return makeAnalyzer(
         [
           schemas.createFile,
-          // schemas.updateFile,
+          schemas.updateFile,
           schemas.deleteFile,
           schemas.deleteDir,
           schemas.moveFile,
-          // schemas.moveDir,
-          // schemas.writeError
+          schemas.moveDir,
+          errorSchemas.writeErrorSchema(schemas.root)
         ],
         path,
         state,

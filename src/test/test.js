@@ -5,11 +5,12 @@ import path from "path";
 import makePlugin from "./plugin";
 import sourceMapSupport from "source-map-support";
 import * as utils from "isotropy-plugin-dev-utils";
+import { Match, Skip, Fault, Empty } from "chimpanzee";
 
 sourceMapSupport.install();
 
 describe("isotropy-ast-analyzer-filesystem", () => {
-  function run([description, dir, opts]) {
+  function run([description, dir, resultType, opts]) {
     it(`${description}`, () => {
       const fixturePath = path.resolve(
         __dirname,
@@ -52,31 +53,40 @@ describe("isotropy-ast-analyzer-filesystem", () => {
         return pluginInfo.getResult();
       };
 
-      return dir.includes("error")
-        ? should(() => callWrapper()).throw(
-            /Compilation failed. Not a valid isotropy operation./
-          )
-        : (() => {
-            const expected = require(`./fixtures/${dir}/expected`);
-            const result = callWrapper();
-            const actual = utils.astCleaner.clean(result.analysis);
-            actual.should.deepEqual(expected);
-          })();
+      const expected = require(`./fixtures/${dir}/expected`);
+      const result = callWrapper();
+      const actual = result.analysis;
+
+      if (resultType === "match") {
+        actual.should.be.an.instanceOf(Match);
+        const cleaned = utils.astCleaner.clean(actual.value);
+        cleaned.should.deepEqual(expected);
+      } else if (resultType === "empty") {
+        actual.should.be.an.instanceOf(Empty);
+      } else if (resultType === "skip") {
+        actual.should.be.an.instanceOf(Skip);
+        actual.message.should.equal(expected.message);
+      } else if (resultType === "fault") {
+        actual.should.be.an.instanceOf(Fault);
+        actual.message.should.equal(expected.message);
+      }
     });
   }
 
   const tests = [
-    ["create-file", "create-file"],
-    ["delete-dir", "delete-dir"],
-    ["delete-file", "delete-file"],
-    ["get-files", "get-files"],
-    ["getfiles-recursive", "get-files-recursive"],
+    // ["create-file", "create-file"],
+    // ["delete-dir", "delete-dir"],
+    // ["delete-file", "delete-file"],
+    // ["get-files", "get-files"],
+    // ["getfiles-recursive", "get-files-recursive"],
     // ["move-dir", "move-dir"],
-    ["move-file", "move-file"],
-    ["move-file-ulta", "move-file-ulta"],
-    ["read-file", "read-file"],
-    ["read-file-ulta", "read-file-ulta"],
+    // ["move-file", "move-file"],
+    // ["move-file-ulta", "move-file-ulta"],
+    // ["read-file", "read-file"],
+    // ["read-file-ulta", "read-file-ulta"],
     // ["update-file", "update-file"],
+    ["non-specific-write-error", "non-specific-write-error", "fault"],
+    ["non-specific-read-error", "non-specific-read-error", "fault"]
   ];
 
   for (const test of tests) {
