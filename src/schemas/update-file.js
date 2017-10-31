@@ -116,9 +116,7 @@ export default function(state, analysisState) {
         },
         {
           build: obj => context => result =>
-            (() => {
-              debugger;
-            })() || result instanceof Match
+            result instanceof Match
               ? {
                   filename:
                     result.value.arguments[0].test.filenameExpression.filename,

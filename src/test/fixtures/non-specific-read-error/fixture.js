@@ -1,5 +1,5 @@
-import myDb from "../my-db";
+import myFS from "../my-fs";
 
 async function readTodos() {
-  return myDb.todos.lalala();
+  return myFS.todos.lalala();
 }

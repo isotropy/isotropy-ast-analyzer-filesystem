@@ -1,5 +1,5 @@
-import myDb from "../my-db";
+import myFS from "../my-fs";
 
 async function addTodo() {
-  myDb.todos = myDb.todos.lalala();
+  myFS.todos = myDb.todos.lalala();
 }
