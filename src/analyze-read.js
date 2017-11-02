@@ -10,7 +10,10 @@ export default function(analysisState) {
           schemas.readFile,
           schemas.getFiles,
           schemas.getFilesRecursively,
-          errorSchemas.readErrorSchema(schemas.root)
+          errorSchemas.readErrorSchema(
+            schemas.root,
+            "Unable to parse file system read expression. Refer to documentation."
+          )
         ],
         path,
         state,

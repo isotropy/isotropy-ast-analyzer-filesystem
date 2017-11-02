@@ -1,3 +1,3 @@
 module.exports = {
-  message: `Unable to parse KeyValueDB read expression. Refer to documentation.`
+  message: `Unable to parse file system read expression. Refer to documentation.`
 };

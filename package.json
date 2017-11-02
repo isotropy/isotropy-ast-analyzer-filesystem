@@ -14,7 +14,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "chimpanzee": "^0.0.65",
-    "isotropy-analyzer-errors": "^0.0.6",
+    "isotropy-analyzer-errors": "^0.0.7",
     "isotropy-analyzer-utils": "^0.0.14",
     "isotropy-plugin-dev-utils": "^0.0.6",
     "lazily": "^0.0.17",

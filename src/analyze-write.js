@@ -13,7 +13,10 @@ export default function(analysisState) {
           schemas.deleteDir,
           schemas.moveFile,
           schemas.moveDir,
-          errorSchemas.writeErrorSchema(schemas.root)
+          errorSchemas.writeErrorSchema(
+            schemas.root,
+            "Unable to parse file system write expression. Refer to documentation."
+          )
         ],
         path,
         state,
