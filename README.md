@@ -47,7 +47,7 @@ import fs from "isotropy-lib-fs";
 //Create a file
 fs.createFile("/home/reports/report-2015.txt", "2015: 40");
 
-// returns { contents: "2015: 40" }
+// returns { type: "file", name: "report-2015.txt", contents: "2015: 40" } 
 fs.readFile("/home/reports/report-2015.txt");
 
 //Update a file
@@ -59,6 +59,12 @@ fs.deleteFile("/home/reports/report-2015.txt");
 //Move a file
 fs.moveFile("/home/reports/report-2015.txt", "/home/reports/totals-2015.txt")
 
+//Read a directory
+fs.readDir("/home/reports");
+
+//Read dir recursively
+fs.readDirRecursive("/home")
+
 //Create a directory
 fs.createDir("/home/reports/older");
 
@@ -68,4 +74,3 @@ fs.moveDir("/home/reports/older", "/home/reports/archived");
 //Delete dir
 fs.deleteDir("/home/reports/archived")
 ```
-
