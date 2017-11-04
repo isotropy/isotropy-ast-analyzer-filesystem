@@ -5,7 +5,7 @@ First, we need to create a JS file while represents or emulates our file system 
 Here's how you do that.
 
 ```javascript
-import fs from "isotropy-lib-fs";
+import fs from "isotropy-lib-filesystem";
 
 fs.init([
   {
@@ -41,7 +41,7 @@ fs.init([
 You should then be able to query from anywhere else.
 
 ```javascript
-import fs from "isotropy-lib-fs";
+import fs from "isotropy-lib-filesystem";
 
 //Read a file
 //Create a file
