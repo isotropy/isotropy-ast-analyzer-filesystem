@@ -1,120 +1,71 @@
 Isotropy AST Analyzer for FS
 ============================
-This module abstracts AST analysis for common filesystem operations so that they don't have to be repeated in every filesystem plugin.
-This is part of the isotropy framework (www.isotropy.org).
 
-Create a module "fs.js" containing an array that mocks the filesystem.
-The filename can be changed in configuration.
+First, we need to create a JS file while represents or emulates our file system on the client-side.
+Here's how you do that.
+
 ```javascript
-//In fs.js
-export default [
+import fs from "isotropy-lib-fs";
+
+fs.init([
   {
-    { dir: "pictures", filename: "stock_photo1.jpg", contents: "FF D8 FF ..." },
-    { dir: "trash", filename: "not-passwords.txt", contents: "thisisnotpassword" }
+    type: "dir",
+    name: "home",
+    contents: [
+      {
+        type: "dir",
+        name: "docs",
+        contents: [
+          {
+            type: "file",
+            name: "report.txt",
+            contents: "2017: 200; 2016: 150"
+          },
+          {
+            type: "file",
+            name: "old-report.txt",
+            contents: "2017: 220; 2016: 100"
+          }
+        ]
+      },
+      {
+        type: "file",
+        name: "placeholder.txt",
+        contents: "This is empty."
+      }
+    ]
   }
-]
+])
 ```
 
-Create a file
+You should then be able to query from anywhere else.
+
 ```javascript
-import myFS from "./my-fs.js";
+import fs from "isotropy-lib-fs";
 
-async function createFile() {
-  myFS.docs = myFS.docs.concat({
-    dir: "path/to/docs/",
-    filename: "report.txt",
-    contents: "hello, world"
-  });
-}
+//Read a file
+//Create a file
+fs.createFile("/home/reports/report-2015.txt", "2015: 40");
 
+// returns { contents: "2015: 40" }
+fs.readFile("/home/reports/report-2015.txt");
+
+//Update a file
+fs.updateFile("/home/reports/report-2015.txt", "2015: 60");
+
+//Delete a file
+fs.deleteFile("/home/reports/report-2015.txt");
+
+//Move a file
+fs.moveFile("/home/reports/report-2015.txt", "/home/reports/totals-2015.txt")
+
+//Create a directory
+fs.createDir("/home/reports/older");
+
+//Move a dir
+fs.moveDir("/home/reports/older", "/home/reports/archived");
+
+//Delete dir
+fs.deleteDir("/home/reports/archived")
 ```
 
-Read a file
-```javascript
-import myFS from "./my-fs.js";
-
-async function readFile() {
-  return myFS.docs.find(file => file.dir === "path/to/docs/" && file.filename === "report.txt");
-}
-```
-
-Get all files in a directory
-```javascript
-import myFS from "../my-fs";
-
-async function getFiles() {
-  return myFS.docs.filter(file => file.dir === "path/to/docs/");
-}
-```
-
-Get all files in a directory recursively down to the last level of directories
-```javascript
-import myFS from "../my-fs";
-
-async function getFiles() {
-  return myFS.docs.filter(
-    file => file.dir === "path/to/docs/" || file.dir.startsWith("path/to/docs/")
-  );
-}
-```
-
-Update a file
-```javascript
-import myFS from "./my-fs.js";
-
-async function updateFile() {
-  myFS.docs = myFS.docs.map(
-    file =>
-      file.dir === "path/to/docs/" && file.filename === "report.txt"
-        ? { ...file, contents: "hello, universe" }
-        : file
-  );
-}
-```
-
-Delete a file
-```javascript
-import myFS from "../my-fs";
-
-async function deleteFile() {
-  myFS.docs = myFS.docs.filter(
-    file => !(file.dir === "path/to/docs/" && file.filename === "report.txt")
-  );
-}
-```
-
-Delete a directory
-```javascript
-import myFS from "../my-fs";
-
-async function deleteDir() {
-  myFS.docs = myFS.docs.filter(file => !(file.dir === "path/to/docs/"));
-}
-```
-
-Move a file
-```javascript
-import myFS from "../my-fs";
-
-async function moveFile() {
-  myFS.docs = myFS.docs.map(
-    file =>
-      file.dir === "path/to/docs/" && file.filename === "report.txt"
-        ? { ...file, dir: "path/to/reports/", filename: "report.txt" }
-        : file
-  );
-}
-
-```
-
-Move a directory
-```javascript
-import myFS from "../my-fs";
-
-async function moveFile() {
-  myFS.docs = myFS.docs.map(
-    file => (file.dir === "path/to/docs/" ? { ...file, dir: "path/to/reports/" } : file)
-  );
-}
-
-```
